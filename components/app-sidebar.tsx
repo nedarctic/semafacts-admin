@@ -74,7 +74,7 @@ export function AppSidebar({ user, ...props }: { user: { name: string; email: st
         <SidebarMenu>
           <SidebarMenuItem className="w-full">
             <SidebarMenuButton>
-              <p className="font-semibold text-black text-lg">SF</p>
+              <p className="font-semibold text-black text-md">SF</p>
               <span>Admin Dashboard</span>
             </SidebarMenuButton>
           </SidebarMenuItem>

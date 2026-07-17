@@ -22,7 +22,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
             <AppSidebar user={user} variant="floating" />
             <SidebarInset>
                 <TooltipProvider>
-                    <div className="p-6">{children}</div>
+                    <div className="p-4">{children}</div>
                 </TooltipProvider>
             </SidebarInset>
         </SidebarProvider>

@@ -1,4 +1,5 @@
-import { cn } from "@/lib/utils"
+"use client"
+
 import { Button } from "@/components/ui/button"
 import {
   Card,
@@ -11,29 +12,75 @@ import {
   Field,
   FieldDescription,
   FieldGroup,
-  FieldLabel,
+  FieldLabel
 } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
+import { cn } from "@/lib/utils"
+import { signIn } from "next-auth/react"
+import Link from "next/link"
+import { useRouter } from "next/navigation"
+import React, { useId, useState, useTransition } from "react"
+import { InputGroup, InputGroupAddon, InputGroupInput } from "./ui/input-group"
+import { EyeIcon, EyeOffIcon } from "lucide-react"
+
+type LoginFormProps = React.ComponentProps<"div"> & {
+  userType: "Handler" | "Admin"
+};
 
 export function LoginForm({
   className,
+  userType,
   ...props
-}: React.ComponentProps<"div">) {
+}: LoginFormProps) {
+
+  const router = useRouter();
+  const id = useId();
+  const [isPending, startTransition] = useTransition();
+
+  const [error, setError] = useState<string>();
+  const [email, setEmail] = useState<string>();
+  const [password, setPassword] = useState<string>();
+  const [isVisible, setIsVisible] = useState(false);
+
+  const loginHandler = async (e: React.SubmitEvent) => {
+    e.preventDefault();
+
+    startTransition(async () => {
+
+      setError("");
+      const res = await signIn(userType === "Admin" ? "admin-access" : "handler-access", {
+        email,
+        password,
+        redirect: false,
+        callbackUrl: userType === "Admin" ? "/admin" : "/handler/incidents",
+      });
+
+      if (res?.error == "CredentialsSignin") {
+        setError("Wrong email or password");
+        return;
+      }
+
+      router.push(userType === "Admin" ? (res?.url || "/admin") : "/handler/incidents");
+    });
+
+  }
+
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <Card>
-        <CardHeader>
-          <CardTitle>SemaFacts</CardTitle>
+        <CardHeader className="text-center">
+          <CardTitle className="text-xl">Welcome back</CardTitle>
           <CardDescription>
-            Enter your email below to login to your account
+            Login with your E-mail and password
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <form>
+          <form onSubmit={loginHandler}>
             <FieldGroup>
               <Field>
                 <FieldLabel htmlFor="email">Email</FieldLabel>
                 <Input
+                  onChange={(e) => setEmail(e.target.value)}
                   id="email"
                   type="email"
                   placeholder="m@example.com"
@@ -41,30 +88,53 @@ export function LoginForm({
                 />
               </Field>
               <Field>
-                <div className="flex items-center">
+                <div className="flex items-center justify-between">
                   <FieldLabel htmlFor="password">Password</FieldLabel>
-                  <a
-                    href="#"
-                    className="ml-auto inline-block text-sm underline-offset-4 hover:underline"
+                  <Link
+                    href="/password"
+                    className="text-sm text-muted-foreground hover:underline"
                   >
-                    Forgot your password?
-                  </a>
+                    Forgot password?
+                  </Link>
                 </div>
-                <Input id="password" type="password" required />
+                 <InputGroup>
+                  <InputGroupInput
+                    aria-describedby={`${id}-description`}
+                    id={id}
+                    onChange={(e) => setPassword(e.target.value)}
+                    placeholder="Password"
+                    type={isVisible ? "text" : "password"}
+                    name="password"
+                  />
+                  <InputGroupAddon align="inline-end">
+                    <Button
+                      aria-label={isVisible ? "Hide password" : "Show password"}
+                      onClick={() => setIsVisible(!isVisible)}
+                      size="icon-xs"
+                      variant="ghost"
+                      type="button"
+                    >
+                      {isVisible ? (
+                        <EyeOffIcon aria-hidden="true" />
+                      ) : (
+                        <EyeIcon aria-hidden="true" />
+                      )}
+                    </Button>
+                  </InputGroupAddon>
+                </InputGroup>
               </Field>
+              {error && <p className="text-red-600 font-normal text-sm">{error}</p>}
               <Field>
-                <Button type="submit">Login</Button>
-                <Button variant="outline" type="button">
-                  Login with Google
-                </Button>
-                <FieldDescription className="text-center">
-                  Don&apos;t have an account? <a href="#">Sign up</a>
-                </FieldDescription>
+                <Button type="submit">{isPending ? "Signing in..." : "Sign in"}</Button>
               </Field>
             </FieldGroup>
           </form>
         </CardContent>
       </Card>
+      <FieldDescription className="px-6 text-center">
+        By clicking continue, you agree to our <a href="#">Terms of Service</a>{" "}
+        and <a href="#">Privacy Policy</a>.
+      </FieldDescription>
     </div>
   )
 }
