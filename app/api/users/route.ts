@@ -8,7 +8,7 @@ export async function GET() {
         if (!session) {
             return NextResponse.redirect("/admin-login");
         }
-        const { accessToken, user } = session;
+        const { accessToken } = session;
         const url = `${process.env.BACKEND_API_URL}/users`;
         const res = await fetch(url, {
             method: "GET",
@@ -21,7 +21,7 @@ export async function GET() {
             return NextResponse.json({
                 success: false,
                 error: await res.text()
-            })
+            }, { status: res.status })
         }
 
         const data = await res.json();
@@ -35,7 +35,7 @@ export async function GET() {
         return NextResponse.json({
             success: false,
             error: error instanceof Error ? error.message : String(error)
-        })
+        }, { status: 500 })
     }
 }
 
@@ -45,7 +45,7 @@ export async function POST(req: NextRequest) {
         if (!session) {
             return NextResponse.redirect("/admin-login");
         }
-        const { accessToken, user } = session;
+        const { accessToken } = session;
         const body = await req.json();
         const url = `${process.env.BACKEND_API_URL}/users`;
         const res = await fetch(url, {
@@ -56,12 +56,12 @@ export async function POST(req: NextRequest) {
             },
             body: JSON.stringify(body)
         });
-        
-        if(!res.ok){
+
+        if (!res.ok) {
             return NextResponse.json({
                 success: false,
                 error: await res.text()
-            })
+            }, { status: res.status })
         }
 
         const data = await res.json();
@@ -73,6 +73,6 @@ export async function POST(req: NextRequest) {
         return NextResponse.json({
             success: false,
             error: error instanceof Error ? error.message : String(error)
-        })
+        }, { status: 500 })
     }
 }

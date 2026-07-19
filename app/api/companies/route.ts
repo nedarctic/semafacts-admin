@@ -26,7 +26,7 @@ export async function PATCH(req: NextRequest) {
             return NextResponse.json({
                 success: false,
                 error: await res.text()
-            });
+            }, {status: res.status});
         }
 
         const data = await res.json();
@@ -63,7 +63,7 @@ export async function GET() {
             return NextResponse.json({
                 success: false,
                 error: await res.text(),
-            });
+            }, {status: res.status});
         }
 
         const data = await res.json();
