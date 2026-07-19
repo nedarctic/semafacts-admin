@@ -1,13 +1,12 @@
 import { getServerSession } from "next-auth";
 import { type NextRequest, NextResponse } from "next/server";
 import { authOptions } from "../../auth/[...nextauth]/route";
-import { redirect } from "next/navigation";
 
 export async function PATCH(req: NextRequest, { params }: { params: Promise<{ incidentId: string }> }) {
     try {
         const session = await getServerSession(authOptions);
         if (!session) {
-            redirect('/admin-login');
+            return NextResponse.redirect('/admin-login');
         }
         const { accessToken } = session;
 
@@ -48,7 +47,7 @@ export async function GET (req: NextRequest, { params }: { params: Promise<{ inc
     try {
         const session = await getServerSession(authOptions);
         if (!session) {
-            redirect('/admin-login');
+            return NextResponse.redirect('/admin-login');
         }
         const { accessToken } = session;
 

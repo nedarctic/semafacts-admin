@@ -1,5 +1,4 @@
 import { getServerSession } from "next-auth";
-import { redirect } from "next/navigation";
 import { NextResponse, type NextRequest } from "next/server";
 import { authOptions } from "../auth/[...nextauth]/route";
 
@@ -7,7 +6,7 @@ export async function GET(req: NextRequest) {
     try {
         const session = await getServerSession(authOptions);
         if (!session) {
-            redirect('/login');
+            return NextResponse.redirect('/login');
         }
         const { accessToken } = session;
 
@@ -45,7 +44,7 @@ export async function POST(req: NextRequest) {
     try {
         const session = await getServerSession(authOptions);
         if (!session) {
-            redirect('/login');
+            return NextResponse.redirect('/login');
         }
         const { accessToken } = session;
 
