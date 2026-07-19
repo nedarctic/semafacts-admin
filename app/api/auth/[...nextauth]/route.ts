@@ -44,6 +44,8 @@ async function refreshToken(refreshToken: string, oldToken: JWT) {
 
 export const authOptions: AuthOptions = {
     providers: [
+
+        // admin auth
         CredentialsProvider({
             id: "admin-access",
             name: "Admin Access",
@@ -52,6 +54,56 @@ export const authOptions: AuthOptions = {
                 password: { label: "password", type: "password" }
             },
             async authorize(credentials) {
+                const email = credentials?.email;
+                const password = credentials?.password;
+
+                if (!email || !password) {
+                    return null;
+                }
+
+                const url = `${process.env.BACKEND_API_URL}/auth/login`;
+                const res = await fetch(url, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({ email, password })
+                });
+
+                if (!res.ok) {
+                    return null;
+                }
+
+                const { access_token, refresh_token, user } = await res.json();
+
+                const expiresAt = decodeExp(access_token);
+
+                if (isNaN(expiresAt)) {
+                    return null;
+                }
+
+                return {
+                    id: user.id,
+                    name: user.name,
+                    email: user.email,
+                    role: user.role,
+                    companyId: user.companyId,
+                    accessToken: access_token,
+                    refreshToken: refresh_token,
+                    expiresAt
+                }
+            }
+        }),
+
+        // handler auth
+        CredentialsProvider({
+            id: "handler-access",
+            name: "Handler Access",
+            credentials: {
+                email: {label: "email", type: "text"},
+                password: {label: "password", type: "text"}
+            },
+            async authorize (credentials) {
                 const email = credentials?.email;
                 const password = credentials?.password;
 
