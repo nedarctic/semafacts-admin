@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react";
+import { MouseEvent, useState } from "react";
 import { 
     Dialog, 
     DialogClose, 
@@ -16,7 +16,7 @@ import { signOut } from "next-auth/react";
 import { toast } from "sonner";
 import { LogOutIcon } from "lucide-react";
 
-export function LogoutDialog({owner}: {owner: "Reporter" | "Handler"}) {
+export function LogoutDialog({owner}: {owner: "Reporter" | "Handler" | "Admin"}) {
     const [open, setOpen] = useState<boolean>(false);
     const [loading, setLoading] = useState<boolean>(false);
 
@@ -24,7 +24,7 @@ export function LogoutDialog({owner}: {owner: "Reporter" | "Handler"}) {
         try {
             setLoading(true);
             await signOut({
-                callbackUrl: owner === "Reporter" ? "/reporter-login" : "/handler-login",
+                callbackUrl: owner === "Reporter" ? "/reporter-login" : (owner === "Handler" ? "/handler-login" : "/admin-login"),
                 redirect: true,
             });
             setLoading(false);
@@ -47,6 +47,7 @@ export function LogoutDialog({owner}: {owner: "Reporter" | "Handler"}) {
                 <div className="flex flex-row gap-2 justify-end">
                     <DialogClose render={<Button>Cancel</Button>} />
                     <Button onClick={handleLogout} 
+                    type="button"
                     variant="destructive">{loading ? <Spinner size={8} /> : "Logout"}</Button>
                 </div>
             </DialogContent>
