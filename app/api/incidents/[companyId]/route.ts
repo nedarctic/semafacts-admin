@@ -1,16 +1,17 @@
 import { getServerSession } from "next-auth";
 import { NextResponse, type NextRequest } from "next/server";
-import { authOptions } from "../auth/[...nextauth]/route";
+import { authOptions } from "../../auth/[...nextauth]/route";
 
-export async function GET(req: NextRequest) {
+export async function GET(req: NextRequest, { params }: { params: Promise<{ companyId: string }> }) {
     try {
         const session = await getServerSession(authOptions);
         if (!session) {
             return NextResponse.redirect('/login');
         }
         const { accessToken } = session;
+        const { companyId } = await params;
 
-        const url = `${process.env.BACKEND_API_URL}/incidents`;
+        const url = `${process.env.BACKEND_API_URL}/incidents/${companyId}`;
         const res = await fetch(url, {
             method: "GET",
             headers: {
@@ -40,25 +41,33 @@ export async function GET(req: NextRequest) {
     }
 }
 
-export async function POST(req: NextRequest) {
+export async function POST(req: NextRequest, { params }: { params: Promise<{ companyId: string }> }) {
     try {
-        const session = await getServerSession(authOptions);
-        if (!session) {
-            return NextResponse.redirect('/login');
-        }
-        const { accessToken } = session;
+
+        const { companyId } = await params;
 
         const formData = await req.formData();
-        const url = `${process.env.BACKEND_API_URL}/incidents`;
+
+        const url = `${process.env.BACKEND_API_URL}/incidents/${companyId}`;
+
         const res = await fetch(url, {
             method: "POST",
-            headers: {
-                Authorization: `Bearer ${accessToken}`
-            },
             body: formData
         });
 
         const data = await res.json();
+        console.log("backend response data", data)
+
+        /*
+        backend response data {
+            message: [
+                'reporterType must be a string',
+                'reporterType should not be empty'
+            ],
+            error: 'Bad Request',
+            statusCode: 400
+        }
+        */
 
         if (!res.ok) {
             return NextResponse.json({

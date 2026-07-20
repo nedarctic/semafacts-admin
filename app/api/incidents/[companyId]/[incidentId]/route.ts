@@ -1,6 +1,6 @@
 import { getServerSession } from "next-auth";
 import { type NextRequest, NextResponse } from "next/server";
-import { authOptions } from "../../auth/[...nextauth]/route";
+import { authOptions } from "../../../auth/[...nextauth]/route";
 
 export async function PATCH(req: NextRequest, { params }: { params: Promise<{ incidentId: string }> }) {
     try {
