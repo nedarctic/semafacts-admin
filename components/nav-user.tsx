@@ -20,8 +20,10 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar"
-import { EllipsisVerticalIcon, CircleUserRoundIcon, CreditCardIcon, BellIcon, LogOutIcon } from "lucide-react"
+import { BellIcon, CircleUserRoundIcon, EllipsisVerticalIcon, LogOutIcon } from "lucide-react"
 import { signOut } from "next-auth/react"
+import { useRouter } from "next/navigation"
+import { LogoutDialog } from "./logout-dialog"
 
 export function NavUser({
   user,
@@ -32,6 +34,7 @@ export function NavUser({
     avatar: string
   }
 }) {
+  const router = useRouter();
   const { isMobile } = useSidebar()
 
   return (
@@ -59,7 +62,7 @@ export function NavUser({
           } />
 
           <DropdownMenuContent
-            className="w-(--radix-dropdown-menu-trigger-width) min-w-56 rounded-lg"
+            className="w-(--radix-dropdown-menu-trigger-width) min-w-56 min-h-41 rounded-lg"
             side={isMobile ? "bottom" : "right"}
             align="end"
             sideOffset={4}
@@ -83,25 +86,19 @@ export function NavUser({
             
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <DropdownMenuItem>
+              <DropdownMenuItem onClick={() => router.push("/admin/account")}>
                 <CircleUserRoundIcon
                 />
                 Account
               </DropdownMenuItem>
-              <DropdownMenuItem>
+              <DropdownMenuItem onClick={() => router.push("/admin/notifications")}>
                 <BellIcon
                 />
                 Notifications
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={() => {
-              signOut({ callbackUrl: '/login', redirect: true })
-            }}>
-              <LogOutIcon
-              />
-              Log out
-            </DropdownMenuItem>
+            <DropdownMenuItem render={<LogoutDialog owner="Admin" />} />
           </DropdownMenuContent>
         </DropdownMenu>
       </SidebarMenuItem>
