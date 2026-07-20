@@ -2,14 +2,37 @@ import { AppSidebar } from "@/components/app-sidebar";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import React from "react";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { getServerSession } from "next-auth";
+import { authOptions } from "../api/auth/[...nextauth]/route";
+import { UserRole } from "@/lib/types/user-role.enum";
+import { redirect } from "next/navigation";
 
-export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
-    
+export default async function AdminDashboardLayout({ children }: { children: React.ReactNode }) {
+
+    const session = await getServerSession(authOptions);
+
+    if (!session || session.user.role !== UserRole.ADMIN) {
+        redirect("/admin-login")
+    };
+
+    console.log("User:", session.user);
+
+    const { user: userData } = session;
+    const { name, email } = userData;
+    const avatar = name?.split(" ").map(name => name[0]).reduce((prev, current) => {
+        return prev = prev + current;
+    }, '');
+
     const user = {
-        name: "John Doe",
-        email: "john.doe@example.com",
-        avatar: "JD"
-    }
+        name,
+        email,
+        avatar
+    } as {
+        name: string;
+        email: string;
+        avatar: string;
+    };
+
     return (
         <SidebarProvider
             style={
@@ -22,7 +45,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
             <AppSidebar user={user} variant="floating" />
             <SidebarInset>
                 <TooltipProvider>
-                    <div className="p-4">{children}</div>
+                    <div className="px-2 py-6">{children}</div>
                 </TooltipProvider>
             </SidebarInset>
         </SidebarProvider>
