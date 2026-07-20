@@ -4,7 +4,7 @@ import React from "react";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../api/auth/[...nextauth]/route";
-import { UserRole } from "@/lib/types/user-role.enum";
+import { UserRole } from "@/lib/enums/user-role.enum";
 import { redirect } from "next/navigation";
 
 export default async function AdminDashboardLayout({ children }: { children: React.ReactNode }) {
@@ -45,7 +45,7 @@ export default async function AdminDashboardLayout({ children }: { children: Rea
             <AppSidebar user={user} variant="floating" />
             <SidebarInset>
                 <TooltipProvider>
-                    <div className="px-2 py-6">{children}</div>
+                    <div className="pl-2 pr-8 py-6">{children}</div>
                 </TooltipProvider>
             </SidebarInset>
         </SidebarProvider>

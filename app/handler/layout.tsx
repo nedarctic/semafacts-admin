@@ -1,7 +1,7 @@
 import { PortalSidebar } from "@/components/portal-sidebar";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { UserRole } from "@/lib/types/user-role.enum";
+import { UserRole } from "@/lib/enums/user-role.enum";
 import { BellIcon, ListIcon, SettingsIcon } from "lucide-react";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
@@ -9,7 +9,7 @@ import { authOptions } from "../api/auth/[...nextauth]/route";
 
 export default async function HandlerPortalLayout({ children }: { children: React.ReactNode }) {
     const session = await getServerSession(authOptions);
-    if(!session || session.user.role !== UserRole.HANDLER){
+    if (!session || session.user.role !== UserRole.HANDLER) {
         redirect("/handler-login");
     }
 
@@ -20,12 +20,12 @@ export default async function HandlerPortalLayout({ children }: { children: Reac
     ];
 
     return (
-    <SidebarProvider >
-        <PortalSidebar owner={"Handler"} links={links} />
-        <SidebarInset>
-            <TooltipProvider>
-                {children}
-            </TooltipProvider>
-        </SidebarInset>
-    </SidebarProvider>);
+        <SidebarProvider >
+            <PortalSidebar owner={"Handler"} links={links} />
+            <SidebarInset>
+                <TooltipProvider>
+                    {children}
+                </TooltipProvider>
+            </SidebarInset>
+        </SidebarProvider>);
 }
