@@ -1,21 +1,18 @@
 'use client'
 
+import { SubmitEvent, useState } from "react";
 import { toast } from "sonner";
-import { Form } from "./ui/form";
-import { useState, SubmitEvent, useRef } from "react";
-import { Field, FieldLabel } from "./ui/field";
-import { Textarea } from "./ui/textarea";
-import { Input } from "./ui/input";
+import z from "zod";
+import { CredentialCard } from "./credential-card";
 import { Button } from "./ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./ui/card";
-import z from "zod";
+import { Dialog, DialogClose, DialogContent, DialogHeader, DialogTitle } from "./ui/dialog";
+import { Field, FieldLabel } from "./ui/field";
+import { Form } from "./ui/form";
+import { Input } from "./ui/input";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
-import { Dialog, DialogContent, DialogClose, DialogFooter, DialogHeader, DialogTitle } from "./ui/dialog";
 import { Spinner } from "./ui/spinner";
-import { useCopyToClipboard } from "@/hooks/use-copy-to-clipboard";
-import { Group, GroupSeparator } from "./ui/group";
-import { Tooltip, TooltipPopup, TooltipTrigger } from "./ui/tooltip";
-import { CheckIcon, CopyIcon } from "lucide-react";
+import { Textarea } from "./ui/textarea";
 
 enum ReporterType {
     Anonymous = "Anonymous",
@@ -83,8 +80,6 @@ const createIncidentSchema = z.object({
 
 export function CreateIncidentForm({ companyId }: { companyId: string }) {
 
-    const { copyToClipboard, isCopied } = useCopyToClipboard();
-
     const [category, setCategory] = useState<string>('');
     const [description, setDescription] = useState<string>('');
     const [location, setLocation] = useState<string>('');
@@ -106,8 +101,6 @@ export function CreateIncidentForm({ companyId }: { companyId: string }) {
     const [loading, setLoading] = useState<boolean>(false);
     const [open, setOpen] = useState<boolean>(false);
     const [errors, setErrors] = useState<any>({});
-
-    const inputRef = useRef<HTMLInputElement>(null);
 
     const submitHandler = async (e: SubmitEvent) => {
         e.preventDefault();
@@ -169,22 +162,21 @@ export function CreateIncidentForm({ companyId }: { companyId: string }) {
                 body: formData
             });
 
-            const data = await res.json();
+            const response = await res.json();
 
             if (!res.ok) {
-                console.error("An error occurred creating incident", data);
+                console.error("An error occurred creating incident", response.error);
                 toast.error("Could not report incident");
                 setOpen(false);
                 setLoading(false);
                 return;
             };
 
-            setCode(code);
-            setSecretCode(secretCode);
+            setCode(response.data.code);
+            setSecretCode(response.data.secretCode);
             setLoading(false);
-            console.log("Code:", data.code);
-            console.log("Secret code:", data.secretCode);
-            setOpen(false);
+            console.log("Code:", response.data.code);
+            console.log("Secret code:", response.data.secretCode);
 
         } catch (error) {
             toast.error("Service temporarily unavailable. Please try again later.")
@@ -193,7 +185,7 @@ export function CreateIncidentForm({ companyId }: { companyId: string }) {
 
     return (
         <Form onSubmit={submitHandler} className="w-full flex flex-col gap-4">
-            <div className="flex flex-row gap-6 my-4">
+            <div className="flex flex-col md:flex-row gap-6 my-4">
                 <Card onClick={e => setReporterType(ReporterType.Anonymous)}
                     className={`cursor-pointer ${reporterType === "Anonymous" ? "ring-2 ring-black cursor-pointer" : ""}`}>
                     <CardHeader>
@@ -274,82 +266,38 @@ export function CreateIncidentForm({ companyId }: { companyId: string }) {
             <Button type="submit">Submit</Button>
 
             <Dialog open={open} onOpenChange={setOpen}>
-                <DialogContent>
+                <DialogContent className="max-w-md">
                     <DialogHeader>
-                        <DialogTitle>{loading ? "Reporting Incident..." : "Copy report trackingcredentials"}</DialogTitle>
-                        {loading ? <Spinner className="size-8" /> :
-                            (code && secretCode) ?
-                                <div className="flex flex-col gap-2">
+                        {!loading && <DialogTitle>Report submitted</DialogTitle>}
+                        {loading ? (
+                            <div className="flex flex-col gap-2 items-center justify-center py-8 text-center">
+                                <Spinner className="size-10" />
+                                <p className="mt-1 text-sm text-muted-foreground">
+                                    Submitting your report…
+                                </p>
+                            </div>
+                        ) :
+                            (code || secretCode) ?
+                                <div className="space-y-2">
+                                    <p className="text-sm text-muted-foreground">
+                                        Save these codes to track your report and access updates.
+                                    </p>
 
-                                    <p>Code: <Group aria-label="incident-code">
-                                        <Input
-                                            aria-label="Incident Code"
-                                            defaultValue={code}
-                                            ref={inputRef}
-                                            type="text"
-                                        />
-                                        <GroupSeparator />
-                                        <Tooltip>
-                                            <TooltipTrigger
-                                                render={
-                                                    <Button
-                                                        aria-label="Copy"
-                                                        onClick={() => {
-                                                            if (inputRef.current) {
-                                                                copyToClipboard(inputRef.current.value);
-                                                            }
-                                                        }}
-                                                        size="icon"
-                                                        variant="outline"
-                                                    />
-                                                }
-                                            >
-                                                {isCopied ? <CheckIcon /> : <CopyIcon />}
-                                            </TooltipTrigger>
-                                            <TooltipPopup>
-                                                <p>Copy to clipboard</p>
-                                            </TooltipPopup>
-                                        </Tooltip>
-                                    </Group></p>
+                                    <div className="grid gap-3">
+                                        <CredentialCard label="Tracking Code" value={code} />
+                                        <CredentialCard label="Secret Code" value={secretCode} />
+                                    </div>
 
-                                    <p>Secret code: <Group aria-label="incident-secret-code">
-                                        <Input
-                                            aria-label="Incident Secret Code"
-                                            defaultValue={secretCode}
-                                            ref={inputRef}
-                                            type="text"
-                                        />
-                                        <GroupSeparator />
-                                        <Tooltip>
-                                            <TooltipTrigger
-                                                render={
-                                                    <Button
-                                                        aria-label="Copy"
-                                                        onClick={() => {
-                                                            if (inputRef.current) {
-                                                                copyToClipboard(inputRef.current.value);
-                                                            }
-                                                        }}
-                                                        size="icon"
-                                                        variant="outline"
-                                                    />
-                                                }
-                                            >
-                                                {isCopied ? <CheckIcon /> : <CopyIcon />}
-                                            </TooltipTrigger>
-                                            <TooltipPopup>
-                                                <p>Copy to clipboard</p>
-                                            </TooltipPopup>
-                                        </Tooltip>
-                                    </Group></p>
-
+                                    <p className="text-sm text-amber-800">
+                                        Secret code shown only once. Store it safely.
+                                    </p>
                                 </div> :
                                 <p className="font-bold text-sm text-red-600">An error occurred.</p>
                         }
                     </DialogHeader>
-                    <DialogFooter>
-                        <DialogClose render={<Button>OK</Button>} />
-                    </DialogFooter>
+                    {!loading ? 
+                        <DialogClose render={<Button className="place-self-end max-w-sm">OK</Button>} />
+                     : ""}
                 </DialogContent>
             </Dialog>
         </Form>
