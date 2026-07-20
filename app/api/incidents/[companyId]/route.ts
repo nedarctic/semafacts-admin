@@ -56,19 +56,6 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ com
         });
 
         const data = await res.json();
-        console.log("backend response data", data)
-
-        /*
-        backend response data {
-            message: [
-                'reporterType must be a string',
-                'reporterType should not be empty'
-            ],
-            error: 'Bad Request',
-            statusCode: 400
-        }
-        */
-
         if (!res.ok) {
             return NextResponse.json({
                 success: false,
