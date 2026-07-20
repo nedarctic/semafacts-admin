@@ -13,6 +13,7 @@ import { Input } from "./ui/input";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
 import { Spinner } from "./ui/spinner";
 import { Textarea } from "./ui/textarea";
+import { useRouter } from "next/navigation";
 
 enum ReporterType {
     Anonymous = "Anonymous",
@@ -79,6 +80,8 @@ const createIncidentSchema = z.object({
 });
 
 export function CreateIncidentForm({ companyId }: { companyId: string }) {
+
+    const router = useRouter();
 
     const [category, setCategory] = useState<string>('');
     const [description, setDescription] = useState<string>('');
@@ -319,6 +322,8 @@ export function CreateIncidentForm({ companyId }: { companyId: string }) {
                                     <p className="text-sm text-amber-800">
                                         Secret code shown only once. Store it safely.
                                     </p>
+
+                                    <Button onClick={() => router.push("/reporter/track")} className="w-full">Track report</Button>
                                 </div> :
                                 <p className="font-bold text-sm text-red-600">An error occurred.</p>
                         }

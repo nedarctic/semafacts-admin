@@ -143,6 +143,60 @@ export const authOptions: AuthOptions = {
                     expiresAt
                 }
             }
+        }),
+
+        // handler auth
+        CredentialsProvider({
+            id: "reporter-access",
+            name: "Reporter Access",
+            credentials: {
+                code: {label: "code", type: "text"},
+                secretCode: {label: "secretCode", type: "text"}
+            },
+            async authorize (credentials) {
+                const code = credentials?.code;
+                const secretCode = credentials?.secretCode;
+
+                console.log("CODE", code);
+                console.log("SECRET CODE", secretCode)
+
+                if (!code || !secretCode) {
+                    return null;
+                }
+
+                const url = `${process.env.BACKEND_API_URL}/incident-auth/login`;
+                console.log("BACKEND URL", url)
+                const res = await fetch(url, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({ code, secretCode })
+                });
+
+                if (!res.ok) {
+                    return null;
+                }
+
+                const { accessToken, refreshToken, user } = await res.json();
+
+                const expiresAt = decodeExp(accessToken);
+
+                if (isNaN(expiresAt)) {
+                    return null;
+                }
+
+                return {
+                    id: user.id,
+                    name: user.name,
+                    email: user.email,
+                    role: user.role,
+                    companyId: user.companyId,
+                    accessToken,
+                    refreshToken,
+                    expiresAt
+                }
+            }
         })
     ],
     callbacks: {
