@@ -125,7 +125,6 @@ export function CreateIncidentForm({ companyId }: { companyId: string }) {
 
             if (!validatedResult.success) {
                 const error = validatedResult.error;
-                console.error("Validation error", error);
                 toast.error("Validation error");
                 setOpen(false);
                 setErrors(z.treeifyError(error));
@@ -165,7 +164,6 @@ export function CreateIncidentForm({ companyId }: { companyId: string }) {
             const response = await res.json();
 
             if (!res.ok) {
-                console.error("An error occurred creating incident", response.error);
                 toast.error("Could not report incident");
                 setOpen(false);
                 setLoading(false);
@@ -218,27 +216,45 @@ export function CreateIncidentForm({ companyId }: { companyId: string }) {
                             ))}
                         </SelectGroup>
                     </SelectContent>
+                {errors?.properties?.category?.errors?.length && 
+                <ul className="pl-4 list-disc">{errors.properties.category.errors.map((error: string, index: number) => 
+                <li className="text-red-600 text-sm font-semibold" key={index}>{error}</li>)}</ul>}
                 </Select>
             </Field>
             <Field>
                 <FieldLabel>Describe what happened, including dates, locations, and any relevant details.</FieldLabel>
                 <Textarea required onChange={e => setDescription(e.target.value)} />
+                {errors?.properties?.description?.errors?.length && 
+                <ul className="pl-4 list-disc">{errors.properties.description.errors.map((error: string, index: number) => 
+                <li className="text-red-600 text-sm font-semibold" key={index}>{error}</li>)}</ul>}
             </Field>
             <Field>
                 <FieldLabel>Where did the incident occur?</FieldLabel>
                 <Input required onChange={e => setLocation(e.target.value)} />
+            {errors?.properties?.location?.errors?.length && 
+                <ul className="pl-4 list-disc">{errors.properties.location.errors.map((error: string, index: number) => 
+                <li className="text-red-600 text-sm font-semibold" key={index}>{error}</li>)}</ul>}
             </Field>
             <Field>
                 <FieldLabel>Names, roles, or departments involved (if known)</FieldLabel>
                 <Input required onChange={e => setInvolvedPeople(e.target.value)} />
+            {errors?.properties?.involvedPeople?.errors?.length && 
+                <ul className="pl-4 list-disc">{errors.properties.involvedPeople.errors.map((error: string, index: number) => 
+                <li className="text-red-600 text-sm font-semibold" key={index}>{error}</li>)}</ul>}
             </Field>
             <Field>
                 <FieldLabel>When did this incident occur?</FieldLabel>
                 <Input required type="date" onChange={e => setIncidentDate(e.target.value)} />
+            {errors?.properties?.incidentDate?.errors?.length && 
+                <ul className="pl-4 list-disc">{errors.properties.incidentDate.errors.map((error: string, index: number) => 
+                <li className="text-red-600 text-sm font-semibold" key={index}>{error}</li>)}</ul>}
             </Field>
             <Field>
                 <FieldLabel>How long has this occurred?</FieldLabel>
                 <Input required onChange={e => setDuration(e.target.value)} />
+            {errors?.properties?.duration?.errors?.length && 
+                <ul className="pl-4 list-disc">{errors.properties.duration.errors.map((error: string, index: number) => 
+                <li className="text-red-600 text-sm font-semibold" key={index}>{error}</li>)}</ul>}
             </Field>
             <Field>
                 <FieldLabel>Attach evidence files if any</FieldLabel>
@@ -247,20 +263,32 @@ export function CreateIncidentForm({ companyId }: { companyId: string }) {
                     console.log(files);
                     setEvidenceFiles(prev => [...prev, ...files])
                 }} />
+            {errors?.properties?.evidenceFiles?.errors?.length && 
+                <ul className="pl-4 list-disc">{errors.properties.evidenceFiles.errors.map((error: string, index: number) => 
+                <li className="text-red-600 text-sm font-semibold" key={index}>{error}</li>)}</ul>}
             </Field>
 
             {reporterType === "Confidential" ? <div className="rounded-2xl ring-black ring-2 p-6 flex flex-col gap-4">
                 <Field>
                     <FieldLabel>Full name</FieldLabel>
                     <Input required onChange={e => setName(e.target.value)} />
+                {errors?.properties?.name?.errors?.length && 
+                <ul className="pl-4 list-disc">{errors.properties.name.errors.map((error: string, index: number) => 
+                <li className="text-red-600 text-sm font-semibold" key={index}>{error}</li>)}</ul>}
                 </Field>
                 <Field>
                     <FieldLabel>Email</FieldLabel>
                     <Input required onChange={e => setEmail(e.target.value)} />
+                {errors?.properties?.email?.errors?.length && 
+                <ul className="pl-4 list-disc">{errors.properties.email.errors.map((error: string, index: number) => 
+                <li className="text-red-600 text-sm font-semibold" key={index}>{error}</li>)}</ul>}
                 </Field>
                 <Field>
                     <FieldLabel>Phone number (optional)</FieldLabel>
                     <Input required onChange={e => setPhone(e.target.value)} />
+                {errors?.properties?.phone?.errors?.length && 
+                <ul className="pl-4 list-disc">{errors.properties.phone.errors.map((error: string, index: number) => 
+                <li className="text-red-600 text-sm font-semibold" key={index}>{error}</li>)}</ul>}
                 </Field>
             </div> : ""}
             <Button type="submit">Submit</Button>
@@ -295,9 +323,9 @@ export function CreateIncidentForm({ companyId }: { companyId: string }) {
                                 <p className="font-bold text-sm text-red-600">An error occurred.</p>
                         }
                     </DialogHeader>
-                    {!loading ? 
+                    {!loading ?
                         <DialogClose render={<Button className="place-self-end max-w-sm">OK</Button>} />
-                     : ""}
+                        : ""}
                 </DialogContent>
             </Dialog>
         </Form>
