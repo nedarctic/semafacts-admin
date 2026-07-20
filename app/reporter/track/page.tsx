@@ -9,7 +9,6 @@ export default async function IncidentTrackingPage() {
         redirect("/reporter-login")
     }
     const { incidentId, accessToken } = session;
-    console.log("Incident ID:", incidentId, "Access token:", accessToken);
 
     const url = `${process.env.BACKEND_API_URL}/incidents/${incidentId}`;
     const res = await fetch(url, {

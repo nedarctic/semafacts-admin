@@ -60,7 +60,7 @@ export function LoginForm({
         return;
       }
 
-      router.push(userType === "Admin" ? (res?.url || "/admin") : "/handler/incidents");
+      router.push(userType === "Admin" ? (res?.url || "/admin") : "/handler");
     });
 
   }

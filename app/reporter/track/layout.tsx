@@ -4,19 +4,27 @@ import { FileIcon, LifeBuoy, ListIcon, LogOutIcon, MessageSquareIcon } from "luc
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { redirect } from "next/navigation";
-import { ReporterPortalSidebar } from "@/components/reporter-portal-sidebar";
+import { PortalSidebar } from "@/components/portal-sidebar";
+import { UserRole } from "@/lib/types/user-role.enum";
 
 export default async function ReporterLayout({ children }: { children: React.ReactNode }) {
 
     const session = await getServerSession(authOptions);
 
-    if (!session) {
+    if (!session || session.user.role !== UserRole.REPORTER) {
         redirect("/reporter-login")
     }
 
+    const links = [
+        { label: "Incident", url: "/reporter/track", icon: <ListIcon size={16} /> },
+        { label: "Messages", url: "/reporter/track/messages", icon: <MessageSquareIcon size={16} /> },
+        { label: "Attachments", url: "/reporter/track/attachments", icon: <FileIcon size={16} /> },
+        { label: "Support", url: "/reporter/track/support", icon: <LifeBuoy size={16} /> },
+    ];
+
     return (
     <SidebarProvider >
-        <ReporterPortalSidebar />
+        <PortalSidebar owner={"Reporter"} links={links} />
         <SidebarInset>
             <TooltipProvider>
                 {children}

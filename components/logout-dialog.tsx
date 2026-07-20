@@ -16,7 +16,7 @@ import { signOut } from "next-auth/react";
 import { toast } from "sonner";
 import { LogOutIcon } from "lucide-react";
 
-export function ReporterLogoutDialog() {
+export function LogoutDialog({owner}: {owner: "Reporter" | "Handler"}) {
     const [open, setOpen] = useState<boolean>(false);
     const [loading, setLoading] = useState<boolean>(false);
 
@@ -24,7 +24,7 @@ export function ReporterLogoutDialog() {
         try {
             setLoading(true);
             await signOut({
-                callbackUrl: "/reporter-login",
+                callbackUrl: owner === "Reporter" ? "/reporter-login" : "/handler-login",
                 redirect: true,
             });
             setLoading(false);
