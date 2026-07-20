@@ -11,6 +11,7 @@ declare module "next-auth" {
         } & DefaultSession["user"];
         accessToken: string;
         refreshToken: string;
+        incidentId?: string;
     }
 
     interface User extends DefaultUser {
@@ -21,7 +22,8 @@ declare module "next-auth" {
         role: UserRole;
         accessToken: string;
         refreshToken: string;
-        expiresAt: NumberFieldIncrement
+        expiresAt: NumberFieldIncrement;
+        incidentId?: string;
     };
 }
 
@@ -35,5 +37,6 @@ declare module "next-auth/jwt" {
         accessToken: string;
         refreshToken: string;
         expiresAt: number;
+        incidentId?: string;
     }
 }

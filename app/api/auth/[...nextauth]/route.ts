@@ -145,7 +145,7 @@ export const authOptions: AuthOptions = {
             }
         }),
 
-        // handler auth
+        // reporter auth
         CredentialsProvider({
             id: "reporter-access",
             name: "Reporter Access",
@@ -178,7 +178,7 @@ export const authOptions: AuthOptions = {
                     return null;
                 }
 
-                const { accessToken, refreshToken, user } = await res.json();
+                const { accessToken, refreshToken, user, incidentId } = await res.json();
 
                 const expiresAt = decodeExp(accessToken);
 
@@ -194,7 +194,8 @@ export const authOptions: AuthOptions = {
                     companyId: user.companyId,
                     accessToken,
                     refreshToken,
-                    expiresAt
+                    expiresAt,
+                    incidentId
                 }
             }
         })
@@ -210,6 +211,7 @@ export const authOptions: AuthOptions = {
                 token.accessToken = user.accessToken;
                 token.refreshToken = user.refreshToken;
                 token.expiresAt = user.expiresAt;
+                token.incidentId = user.incidentId;
             }
 
             if (token.expiresAt > Date.now()) {
@@ -228,6 +230,7 @@ export const authOptions: AuthOptions = {
                 session.user.companyId = token.companyId;
                 session.accessToken = token.accessToken;
                 session.refreshToken = token.refreshToken;
+                session.incidentId = token.incidentId;
             }
 
             return session;
