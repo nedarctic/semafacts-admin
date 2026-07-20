@@ -37,7 +37,7 @@ export function ReporterPortalSidebar () {
 
     return (
         <Sidebar variant="inset">
-            <SidebarHeader>
+            <SidebarHeader className="font-medium">
                 Reporter Portal
             </SidebarHeader>
             <SidebarContent>
