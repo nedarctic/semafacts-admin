@@ -5,7 +5,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { redirect } from "next/navigation";
 import { PortalSidebar } from "@/components/portal-sidebar";
-import { UserRole } from "@/lib/types/user-role.enum";
+import { UserRole } from "@/lib/enums/user-role.enum";
 
 export default async function ReporterLayout({ children }: { children: React.ReactNode }) {
 
@@ -23,12 +23,12 @@ export default async function ReporterLayout({ children }: { children: React.Rea
     ];
 
     return (
-    <SidebarProvider >
-        <PortalSidebar owner={"Reporter"} links={links} />
-        <SidebarInset>
-            <TooltipProvider>
-                {children}
-            </TooltipProvider>
-        </SidebarInset>
-    </SidebarProvider>);
+        <SidebarProvider >
+            <PortalSidebar owner={"Reporter"} links={links} />
+            <SidebarInset>
+                <TooltipProvider>
+                    {children}
+                </TooltipProvider>
+            </SidebarInset>
+        </SidebarProvider>);
 }
