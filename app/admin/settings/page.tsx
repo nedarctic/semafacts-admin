@@ -35,7 +35,6 @@ export default async function SettingsPage() {
 
     const company: Company = await res.json();
 
-    console.log("data", company);
     return (
         <div className="min-h-screen flex flex-col gap-6">
             <BreadCrumb currentPage="Settings" />

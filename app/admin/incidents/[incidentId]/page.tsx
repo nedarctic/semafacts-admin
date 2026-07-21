@@ -53,7 +53,6 @@ export default async function IncidentDetailsPage({ params }: { params: Promise<
     };
 
     const incident: Incident = await res.json();
-    console.log("Incident:", incident)
 
     return (
         <div className="min-h-screen flex flex-col gap-6">
