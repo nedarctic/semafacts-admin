@@ -15,8 +15,6 @@ export default async function AdminDashboardLayout({ children }: { children: Rea
         redirect("/admin-login")
     };
 
-    console.log("User:", session.user);
-
     const { user: userData } = session;
     const { name, email } = userData;
     const avatar = name?.split(" ").map(name => name[0]).reduce((prev, current) => {
@@ -45,7 +43,7 @@ export default async function AdminDashboardLayout({ children }: { children: Rea
             <AppSidebar user={user} variant="floating" />
             <SidebarInset>
                 <TooltipProvider>
-                    <div className="pl-2 pr-8 py-6">{children}</div>
+                    <div className="pl-2 pr-2 md:pr-8 py-6">{children}</div>
                 </TooltipProvider>
             </SidebarInset>
         </SidebarProvider>
