@@ -6,7 +6,7 @@ export async function PATCH(req: NextRequest) {
     try {
         const session = await getServerSession(authOptions);
         if (!session) {
-            return NextResponse.redirect('/admin-login');
+            return NextResponse.redirect(`${process.env.NEXT_PUBLIC_BFF_URL}/admin-login`);
         }
         const { accessToken, user } = session;
         const { companyId } = user;

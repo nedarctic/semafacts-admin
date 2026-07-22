@@ -6,7 +6,7 @@ export async function GET() {
     try {
         const session = await getServerSession(authOptions);
         if (!session) {
-            return NextResponse.redirect("/admin-login");
+            return NextResponse.redirect(`${process.env.NEXT_PUBLIC_BFF_URL}/admin-login`);
         }
         const { accessToken } = session;
         const url = `${process.env.BACKEND_API_URL}/users`;
@@ -43,7 +43,7 @@ export async function POST(req: NextRequest) {
     try {
         const session = await getServerSession(authOptions);
         if (!session) {
-            return NextResponse.redirect("/admin-login");
+            return NextResponse.redirect(`${process.env.NEXT_PUBLIC_BFF_URL}/admin-login`);
         }
         const { accessToken } = session;
         const body = await req.json();

@@ -6,7 +6,7 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ inc
     try {
         const session = await getServerSession(authOptions);
         if (!session) {
-            return NextResponse.redirect("/admin-login");
+            return NextResponse.redirect(`${process.env.NEXT_PUBLIC_BFF_URL}/admin-login`);
         };
         const { accessToken } = session;
         const { incidentId } = await params;
@@ -47,7 +47,7 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ inci
     try {
         const session = await getServerSession(authOptions);
         if (!session) {
-            return NextResponse.redirect("/admin-login");
+            return NextResponse.redirect(`${process.env.NEXT_PUBLIC_BFF_URL}/admin-login`);
         };
         const { accessToken } = session;
         const { incidentId } = await params;

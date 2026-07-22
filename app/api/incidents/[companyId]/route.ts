@@ -6,7 +6,7 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ comp
     try {
         const session = await getServerSession(authOptions);
         if (!session) {
-            return NextResponse.redirect('/login');
+            return NextResponse.redirect(`${process.env.NEXT_PUBLIC_BFF_URL}/admin-login`);
         }
         const { accessToken } = session;
         const { companyId } = await params;
