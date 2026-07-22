@@ -1,6 +1,7 @@
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { BreadCrumb } from "@/components/breadcrumb";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { UpdateReportingPageDrawer } from "@/components/update-reporting-page-drawer";
 import { Category } from "@/lib/types/category";
 import { type ReportingPage } from "@/lib/types/reporting-page";
 import { getServerSession } from "next-auth";
@@ -57,6 +58,7 @@ export default async function ReportingPage() {
                         <div className="flex flex-col gap-6 border-2 border-mist-500 rounded-2xl min-h-screen p-6">
                             <div className="flex flex-row justify-between">
                                 <p className="font-semibold text-lg">Overview</p>
+                                <UpdateReportingPageDrawer data={reportingPage} />
                             </div>
 
                             <ul className="list-disc pl-4 space-y-2">
