@@ -1,4 +1,5 @@
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { AddHandlerDrawer } from "@/components/add-handler-drawer";
 import { BreadCrumb } from "@/components/breadcrumb";
 import { PaginationComponent } from "@/components/pagination";
 import { SearchInput } from "@/components/search-input";
@@ -64,18 +65,21 @@ export default async function TeamPage({ searchParams }: {
     } = await res.json();
 
     const headers = [
-        {label: "Name", key: "name"},
-        {label: "Email", key: "email"},
-        {label: "Role", key: "role"},
-        {label: "Status", key: "status"},
-        {label: "Created", key: "createdAt"},
+        { label: "Name", key: "name" },
+        { label: "Email", key: "email" },
+        { label: "Role", key: "role" },
+        { label: "Status", key: "status" },
+        { label: "Created", key: "createdAt" },
     ];
 
     return (
         <div className="min-h-screen flex flex-col gap-6">
             <BreadCrumb currentPage="Team" />
             <div className="flex flex-col gap-6">
-                <p className="text-2xl">Team</p>
+                <div className="flex flex-row justify-between w-full">
+                    <p className="text-2xl">Team</p>
+                    <AddHandlerDrawer companyId={companyId} />
+                </div>
                 <SearchInput placeholder="Search members..." />
                 <TableData path={"/admin/team"} data={users} headers={headers} />
                 <PaginationComponent meta={meta} />
