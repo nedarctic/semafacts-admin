@@ -1,11 +1,12 @@
-import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarHeader, SidebarInset, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarProvider } from "@/components/ui/sidebar";
-import { TooltipProvider } from "@/components/ui/tooltip";
-import { FileIcon, LifeBuoy, ListIcon, LogOutIcon, MessageSquareIcon } from "lucide-react";
-import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
-import { redirect } from "next/navigation";
 import { PortalSidebar } from "@/components/portal-sidebar";
+import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
+import { Toaster } from "@/components/ui/sonner";
+import { TooltipProvider } from "@/components/ui/tooltip";
 import { UserRole } from "@/lib/enums/user-role.enum";
+import { FileIcon, LifeBuoy, ListIcon, MessageSquareIcon } from "lucide-react";
+import { getServerSession } from "next-auth";
+import { redirect } from "next/navigation";
 
 export default async function ReporterLayout({ children }: { children: React.ReactNode }) {
 
@@ -28,6 +29,7 @@ export default async function ReporterLayout({ children }: { children: React.Rea
             <SidebarInset>
                 <TooltipProvider>
                     {children}
+                    <Toaster richColors position="top-right" />
                 </TooltipProvider>
             </SidebarInset>
         </SidebarProvider>);

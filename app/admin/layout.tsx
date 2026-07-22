@@ -6,6 +6,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "../api/auth/[...nextauth]/route";
 import { UserRole } from "@/lib/enums/user-role.enum";
 import { redirect } from "next/navigation";
+import { Toaster } from "@/components/ui/sonner";
 
 export default async function AdminDashboardLayout({ children }: { children: React.ReactNode }) {
 
@@ -43,7 +44,8 @@ export default async function AdminDashboardLayout({ children }: { children: Rea
             <AppSidebar user={user} variant="floating" />
             <SidebarInset>
                 <TooltipProvider>
-                    <div className="pl-2 pr-2 md:pr-8 py-6">{children}</div>
+                    <div className="p-4 md:pr-8 py-6">{children}</div>
+                    <Toaster richColors position="top-right" />
                 </TooltipProvider>
             </SidebarInset>
         </SidebarProvider>

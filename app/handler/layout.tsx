@@ -6,6 +6,7 @@ import { BellIcon, ListIcon, SettingsIcon } from "lucide-react";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 import { authOptions } from "../api/auth/[...nextauth]/route";
+import { Toaster } from "@/components/ui/sonner";
 
 export default async function HandlerPortalLayout({ children }: { children: React.ReactNode }) {
     const session = await getServerSession(authOptions);
@@ -25,6 +26,7 @@ export default async function HandlerPortalLayout({ children }: { children: Reac
             <SidebarInset>
                 <TooltipProvider>
                     {children}
+                    <Toaster richColors position="top-right" />
                 </TooltipProvider>
             </SidebarInset>
         </SidebarProvider>);
