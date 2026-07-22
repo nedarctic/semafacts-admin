@@ -14,9 +14,9 @@ export interface User {
     refreshToken?: string;
     companyId: string;
     company?: Company;
-    createdAt: string;
-    updatedAt: string;
+    createdAt?: string;
+    updatedAt?: string;
     inviteTokens?: InviteToken[];
-    messages: Message[];
-    incidentHandlers: IncidentHandler[];
+    messages?: Message[];
+    incidentHandlers?: IncidentHandler[];
 }
