@@ -1,31 +1,29 @@
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { BreadCrumb } from "@/components/breadcrumb";
-import { Incident } from "@/lib/types/incident";
-import { getServerSession } from "next-auth";
-import { redirect } from "next/navigation";
-import {
-    Card,
-    CardContent,
-    CardDescription,
-    CardHeader,
-    CardTitle,
-} from "@/components/ui/card"
 import {
     Tabs,
     TabsContent,
     TabsList,
     TabsTrigger,
-} from "@/components/ui/tabs"
-import { Button } from "@/components/ui/button";
+} from "@/components/ui/tabs";
+import { Incident } from "@/lib/types/incident";
+import { IncidentHandler } from "@/lib/types/incident-handler";
+import { Message } from "@/lib/types/message";
+import { getServerSession } from "next-auth";
+import Link from "next/link";
+import { redirect } from "next/navigation";
+import { getNonIncidentHandlers } from "@/lib/helpers/incidents.helpers";
+import { AssignHandlersDrawer } from "@/components/assign-handlers-drawer";
+import { AddEvidenceDrawer } from "@/components/add-evidence-drawer";
 
 export default async function IncidentDetailsPage({ params }: { params: Promise<{ incidentId: string }> }) {
     const session = await getServerSession(authOptions);
     if (!session) {
         redirect("/admin-login");
     }
-    const { accessToken } = session;
+    const { accessToken, user } = session;
+    const { companyId } = user;
     const { incidentId } = await params;
-
 
     const url = `${process.env.BACKEND_API_URL}/incidents/${incidentId}`;
 
@@ -39,6 +37,8 @@ export default async function IncidentDetailsPage({ params }: { params: Promise<
     const crumbs = [
         { label: "Incidents", link: "/admin/incidents" }
     ];
+
+    const { success, data: nonIncidentHandlers, error } = await getNonIncidentHandlers(accessToken, incidentId, companyId)
 
     if (!res.ok) {
         return (
@@ -73,7 +73,7 @@ export default async function IncidentDetailsPage({ params }: { params: Promise<
                             </div>
                             <div className="flex flex-col gap-2">
                                 <ul className="list-disc pl-4 space-y-2">
-                                    <li className="text-md">Status: <span className="font-medium text-white bg-black rounded-md px-2 py-1">{incident.status}</span></li>
+                                    <li className="text-md">Status: <span className="font-medium">{incident.status}</span></li>
                                     <li className="text-md">Incident ID: <span className="font-medium">{incident.incidentIdDisplay}</span></li>
                                     <li className="text-md">Category: <span className="font-medium">{incident.category}</span></li>
                                     <li className="text-md">Description: <span className="font-medium">{incident.description}</span></li>
@@ -83,7 +83,7 @@ export default async function IncidentDetailsPage({ params }: { params: Promise<
                                     <li className="text-md">Date: <span className="font-medium">{incident.incidentDate}</span></li>
                                     <li className="text-md">Reporter type: <span className="font-medium">{incident.reporterType}</span></li>
                                     <li className="text-md">Created: <span className="font-medium">{new Date(incident.createdAt).toLocaleDateString('en-KE', { day: '2-digit', month: 'short', year: 'numeric' })}</span></li>
-                                    <li className="text-md">Deadline: <span className="font-medium">{incident.deadlineAt ? new Date(incident.deadlineAt!).toLocaleDateString('en-KE', { day: '2-digit', month: 'short', year: 'numeric' }) : "Not set" }</span></li>
+                                    <li className="text-md">Deadline: <span className="font-medium">{incident.deadlineAt ? new Date(incident.deadlineAt!).toLocaleDateString('en-KE', { day: '2-digit', month: 'short', year: 'numeric' }) : "Not set"}</span></li>
                                 </ul>
                             </div>
                         </div>
@@ -92,6 +92,12 @@ export default async function IncidentDetailsPage({ params }: { params: Promise<
                         <div className="flex flex-col gap-6 border-2 border-mist-500 rounded-2xl min-h-screen p-6">
                             <div className="flex flex-row justify-between">
                                 <p className="font-semibold text-lg">Handlers</p>
+                                <AssignHandlersDrawer nonIncidentHandlers={nonIncidentHandlers!} />
+                            </div>
+                            <div className="flex flex-col space-y-2">
+                                {incident.handlers?.length ? <ul className="list-disc pl-4">
+                                    {incident.handlers?.map((handler, index) => <li key={index} className="font-medium">{handler?.handler?.name!}</li>)}
+                                </ul> : <p className="font-semibold text-md">No handlers assigned to this incident yet.</p>}
                             </div>
                         </div>
                     </TabsContent>
@@ -100,13 +106,34 @@ export default async function IncidentDetailsPage({ params }: { params: Promise<
                             <div className="flex flex-row justify-between">
                                 <p className="font-semibold text-lg">Messages</p>
                             </div>
-                            
+                            <div className="flex flex-col space-y-2">
+                                {incident.messages?.length ? <ul className="list-disc pl-4">
+                                    {incident.messages?.map((message, index) => <li key={index} className="font-medium">{message?.content}</li>)}
+                                </ul> : <p className="font-semibold text-md">No conversation on this incident yet.</p>}
+                            </div>
                         </div>
                     </TabsContent>
                     <TabsContent value="attachments">
                         <div className="flex flex-col gap-6 border-2 border-mist-500 rounded-2xl min-h-screen p-6">
                             <div className="flex flex-row justify-between">
                                 <p className="font-semibold text-lg">Attachments</p>
+                                <AddEvidenceDrawer />
+                            </div>
+                            <div className="flex flex-col gap-2">
+                                <ul className="flex flex-col gap-3 list-decimal pl-4">
+                                    {incident.attachments?.map((attachment, index) =>
+                                        <li key={index}>
+                                            <div className="flex flex-col gap-2">
+                                                <Link
+                                                    className="text-semibold"
+                                                    target="_blank"
+                                                    href={attachment.fileUrl}>{attachment.mimeType} attachment
+                                                </Link>
+                                                <p className="text-md">Uploaded by <span className="text-md font-medium">{attachment.uploadedBy}</span></p>
+                                            </div>
+                                        </li>
+                                    )}
+                                </ul>
                             </div>
                         </div>
                     </TabsContent>
