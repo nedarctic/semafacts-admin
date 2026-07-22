@@ -41,8 +41,8 @@ export default async function SettingsPage() {
             <div className="flex flex-col gap-4">
                 <p className="text-2xl">Settings</p>
                 <ul className="list-disc pl-4 space-y-2">
-                    <li className="text-md">Title: <span className="font-medium">{company.name}</span></li>
-                    <li className="text-md">SLA Days: <span className="font-medium">{company.slaDays}</span></li>
+                    <li className="text-md">Company name: <span className="font-medium">{company.name}</span></li>
+                    <li className="text-md">SLA days: <span className="font-medium">{company.slaDays}</span></li>
                 </ul>
             </div>
         </div>
