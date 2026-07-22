@@ -1,4 +1,4 @@
-enum IncidentStatus {
+export enum IncidentStatus {
     New = "New",
     InReview = "InReview",
     Investigation = "Investigation",

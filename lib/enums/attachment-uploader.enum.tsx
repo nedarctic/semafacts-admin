@@ -1,4 +1,4 @@
-enum AttachmentUploader {
+export enum AttachmentUploader {
   Reporter = "Reporter",
   Handler = "Handler",
   SuperAdmin = "SuperAdmin"
