@@ -14,6 +14,7 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectVa
 import { Spinner } from "./ui/spinner";
 import { Textarea } from "./ui/textarea";
 import { useRouter } from "next/navigation";
+import { ALLOWED_MIME_TYPES } from "@/lib/constants";
 
 enum ReporterType {
     Anonymous = "Anonymous",
@@ -26,51 +27,14 @@ const evidenceFileSchema = z.instanceof(File)
 
 const createIncidentSchema = z.object({
     reporterType: z.enum(ReporterType),
-    category: z.string().min(1, "Please select a category for this incident"),
-    description: z.string().min(1, "Please provide a description of the incident"),
-    location: z.string().min(1, "Please provide the location where the incident occurred"),
-    involvedPeople: z.string().min(1, "Plese provide us with the information on who was involved in the incident"),
-    incidentDate: z.string().min(1, "Plese provide a date on when the incident occurred"),
-    duration: z.string().min(1, "Plese tell us how long the incident occurred"),
+    category: z.string().trim().min(1, "Please select a category for this incident"),
+    description: z.string().trim().min(1, "Please provide a description of the incident"),
+    location: z.string().trim().min(1, "Please provide the location where the incident occurred"),
+    involvedPeople: z.string().trim().min(1, "Plese provide us with the information on who was involved in the incident"),
+    incidentDate: z.string().trim().min(1, "Plese provide a date on when the incident occurred"),
+    duration: z.string().trim().min(1, "Plese tell us how long the incident occurred"),
     evidenceFiles: z.array(z.instanceof(File).optional()
-        .refine(file => !file || [
-            // Images
-            'image/jpeg',
-            'image/png',
-            'image/webp',
-            'image/gif',
-
-            // Audio
-            'audio/mpeg',
-            'audio/wav',
-            'audio/ogg',
-            'audio/mp4',
-
-            // Video
-            'video/mp4',
-            'video/mpeg',
-            'video/webm',
-            'video/quicktime',
-
-            // Documents
-            'application/pdf',
-
-            // Word
-            'application/msword',
-            'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-
-            // Excel
-            'application/vnd.ms-excel',
-            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-
-            // PowerPoint
-            'application/vnd.ms-powerpoint',
-            'application/vnd.openxmlformats-officedocument.presentationml.presentation',
-
-            // Text
-            'text/plain',
-            'text/csv',
-        ].includes(file.type), { message: "Unsupported file type." })),
+        .refine(file => !file || ALLOWED_MIME_TYPES.includes(file.type), { message: "Unsupported file type." })),
     name: z.string().optional(),
     email: z.string().optional(),
     phone: z.string().regex(
