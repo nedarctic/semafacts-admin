@@ -1,9 +1,9 @@
 import { Company } from "./company";
 
 export interface Category {
-    id: string;
+    id?: string;
     companyId: string;
     categoryName: string;
-    createdAt: string;
-    company: Company;
+    createdAt?: string;
+    company?: Company;
 }
