@@ -26,7 +26,7 @@ const categoriesSchema = z.object({
         .array(
             z.object({
                 id: z.string(),
-                categoryName: z.string().min(1, "Category name is required"),
+                categoryName: z.string().trim().min(1, "Category name is required"),
             })
         )
         .min(1, "At least one category is required")
