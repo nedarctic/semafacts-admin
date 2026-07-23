@@ -19,7 +19,7 @@ export default async function TeamMemberDetailsPage({ params }: {
     const { accessToken } = session;
     const { teamId } = await params;
 
-    const url = `${process.env.BACKEND_API_URL}/users/${teamId}`;
+    const url = `${process.env.BACKEND_URL}/users/${teamId}`;
     const res = await fetch(url, {
         method: "GET",
         headers: {

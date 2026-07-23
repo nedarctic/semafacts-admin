@@ -12,7 +12,7 @@ export default async function IncidentsPage() {
     const { user, accessToken } = session;
     const { id } = user;
 
-    const url = `${process.env.BACKEND_API_URL}/handlers/${id}/incidents`;
+    const url = `${process.env.BACKEND_URL}/handlers/${id}/incidents`;
     const res = await fetch(url, {
         method: "GET",
         headers: {

@@ -12,7 +12,7 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ in
 
         const { incidentId } = await params;
         const formData = await req.formData();
-        const url = `${process.env.BACKEND_API_URL}/incidents/${incidentId}`;
+        const url = `${process.env.BACKEND_URL}/incidents/${incidentId}`;
         const res = await fetch(url, {
             method: "POST",
             headers: {
@@ -52,7 +52,7 @@ export async function GET (req: NextRequest, { params }: { params: Promise<{ inc
         const { accessToken } = session;
 
         const { incidentId } = await params;
-        const url = `${process.env.BACKEND_API_URL}/incidents/${incidentId}`;
+        const url = `${process.env.BACKEND_URL}/incidents/${incidentId}`;
         const res = await fetch(url, {
             method: "GET",
             headers: {

@@ -25,7 +25,7 @@ export default async function IncidentDetailsPage({ params }: { params: Promise<
     const { companyId } = user;
     const { incidentId } = await params;
 
-    const url = `${process.env.BACKEND_API_URL}/incidents/${incidentId}`;
+    const url = `${process.env.BACKEND_URL}/incidents/${incidentId}`;
 
     const res = await fetch(url, {
         method: "GET",

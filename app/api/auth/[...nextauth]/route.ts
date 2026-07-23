@@ -14,7 +14,7 @@ function decodeExp(accessToken: string) {
 }
 
 async function refreshToken(refreshToken: string, oldToken: JWT) {
-    const url = `${process.env.BACKEND_API_URL}/auth/refresh`;
+    const url = `${process.env.BACKEND_URL}/auth/refresh`;
     const res = await fetch(url, {
         method: "POST",
         headers: {
@@ -61,7 +61,7 @@ export const authOptions: AuthOptions = {
                     return null;
                 }
 
-                const url = `${process.env.BACKEND_API_URL}/auth/login`;
+                const url = `${process.env.BACKEND_URL}/auth/login`;
                 const res = await fetch(url, {
                     method: "POST",
                     headers: {
@@ -111,7 +111,7 @@ export const authOptions: AuthOptions = {
                     return null;
                 }
 
-                const url = `${process.env.BACKEND_API_URL}/auth/login`;
+                const url = `${process.env.BACKEND_URL}/auth/login`;
                 const res = await fetch(url, {
                     method: "POST",
                     headers: {
@@ -164,7 +164,7 @@ export const authOptions: AuthOptions = {
                     return null;
                 }
 
-                const url = `${process.env.BACKEND_API_URL}/incident-auth/login`;
+                const url = `${process.env.BACKEND_URL}/incident-auth/login`;
                 console.log("BACKEND URL", url)
                 const res = await fetch(url, {
                     method: "POST",

@@ -6,14 +6,14 @@ export async function POST(req: NextRequest) {
     try {
         const session = await getServerSession(authOptions);
         if (!session) {
-            return NextResponse.redirect(`${process.env.NEXT_PUBLIC_BFF_URL}/admin-login`);
+            return NextResponse.redirect(`${process.env.FRONTEND_URL}/admin-login`);
         }
         const { accessToken, user } = session;
         const { companyId } = user;
 
         const body = await req.json();
 
-        const url = `${process.env.BACKEND_API_URL}/invites/${companyId}`;
+        const url = `${process.env.BACKEND_URL}/invites/${companyId}`;
 
         const res = await fetch(url, {
             method: "POST",

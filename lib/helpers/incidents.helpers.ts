@@ -12,7 +12,7 @@ export async function getNonIncidentHandlers(
     error?: string;
 }> {
     try {
-        const url = `${process.env.BACKEND_API_URL}/incidents/${incidentId}/${companyId}/non-handlers`;
+        const url = `${process.env.BACKEND_URL}/incidents/${incidentId}/${companyId}/non-handlers`;
 
         const res = await fetch(url, {
             method: "GET",
@@ -49,7 +49,7 @@ export async function getIncidentHandlers(
     incidentId: string
 ): Promise<{ success: boolean; data?: IncidentHandler[]; error?: string }> {
     try {
-        const url = `${process.env.BACKEND_API_URL}/incidents/${incidentId}/handlers`;
+        const url = `${process.env.BACKEND_URL}/incidents/${incidentId}/handlers`;
         
         const res = await fetch(url, {
             method: "GET",
@@ -90,7 +90,7 @@ export async function getIncidentMessages(
 }> {
     try {
 
-        const url = `${process.env.BACKEND_API_URL}/incidents/${incidentId}/messages`;
+        const url = `${process.env.BACKEND_URL}/incidents/${incidentId}/messages`;
         const res = await fetch(url, {
             method: "GET",
             headers: {

@@ -6,7 +6,7 @@ export async function getHandlerIncidents (accessToken: string, handlerId: strin
     error?: string;
 }> {
     try {
-        const url = `${process.env.BACKEND_API_URL}/handlers/${handlerId}/incidents`;
+        const url = `${process.env.BACKEND_URL}/handlers/${handlerId}/incidents`;
         const res = await fetch(url, {
             method: "GET",
             headers: {

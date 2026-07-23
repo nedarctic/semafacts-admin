@@ -6,12 +6,12 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ comp
     try {
         const session = await getServerSession(authOptions);
         if (!session) {
-            return NextResponse.redirect(`${process.env.NEXT_PUBLIC_BFF_URL}/admin-login`);
+            return NextResponse.redirect(`${process.env.FRONTEND_URL}/admin-login`);
         }
         const { accessToken } = session;
         const { companyId } = await params;
 
-        const url = `${process.env.BACKEND_API_URL}/incidents/${companyId}`;
+        const url = `${process.env.BACKEND_URL}/incidents/${companyId}`;
         const res = await fetch(url, {
             method: "GET",
             headers: {
@@ -48,7 +48,7 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ com
 
         const formData = await req.formData();
 
-        const url = `${process.env.BACKEND_API_URL}/incidents/${companyId}`;
+        const url = `${process.env.BACKEND_URL}/incidents/${companyId}`;
 
         const res = await fetch(url, {
             method: "POST",

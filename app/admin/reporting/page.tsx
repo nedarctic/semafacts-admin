@@ -1,11 +1,13 @@
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { BreadCrumb } from "@/components/breadcrumb";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { UpdateCategoriesDrawer } from "@/components/update-categories-drawer";
 import { UpdateReportingPageDrawer } from "@/components/update-reporting-page-drawer";
 import { Category } from "@/lib/types/category";
 import { type ReportingPage } from "@/lib/types/reporting-page";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
+import { getCategories } from "@/lib/helpers/categories.helpers";
 
 export default async function ReportingPage() {
 
@@ -16,7 +18,7 @@ export default async function ReportingPage() {
     const { accessToken, user } = session;
     const { companyId } = user;
 
-    const url = `${process.env.BACKEND_API_URL}/companies/${companyId}/reporting-page`;
+    const url = `${process.env.BACKEND_URL}/companies/${companyId}/reporting-page`;
     const res = await fetch(url, {
         method: "GET",
         headers: {
@@ -24,6 +26,7 @@ export default async function ReportingPage() {
         }
     });
 
+    const { data: categories } = await getCategories(accessToken, companyId);
     if (!res.ok) {
         return (
             <div className="min-h-screen flex flex-col gap-6">
@@ -37,10 +40,8 @@ export default async function ReportingPage() {
     }
 
     const {
-        categories,
         reportingPage
     }: {
-        categories: Category[],
         reportingPage: ReportingPage
     } = await res.json();
 
@@ -73,10 +74,11 @@ export default async function ReportingPage() {
                         <div className="flex flex-col gap-6 border-2 border-mist-500 rounded-2xl min-h-screen p-6">
                             <div className="flex flex-row justify-between">
                                 <p className="font-semibold text-lg">Categories</p>
+                                <UpdateCategoriesDrawer data={categories!} />
                             </div>
 
                             <ul className="list-disc pl-4 space-y-2">
-                                {categories.map((category, index) => <li key={index} className="text-md">{category.categoryName}</li>)}
+                                {categories?.map((category, index) => <li key={index} className="text-md">{category.categoryName}</li>)}
                             </ul>
                         </div>
                     </TabsContent>

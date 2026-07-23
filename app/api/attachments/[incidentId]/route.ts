@@ -10,13 +10,13 @@ export async function POST (req: NextRequest, { params }: {
     try {
         const session = await getServerSession(authOptions);
         if (!session) {
-            return NextResponse.redirect(`${process.env.NEXT_PUBLIC_BFF_URL}/admin-login`);
+            return NextResponse.redirect(`${process.env.FRONTEND_URL}/admin-login`);
         }
         const { accessToken } = session;
         const { incidentId } = await params;
 
         const formData = await req.formData();
-        const url = `${process.env.BACKEND_API_URL}/attachments/${incidentId}`;
+        const url = `${process.env.BACKEND_URL}/attachments/${incidentId}`;
         const res = await fetch(url, {
             method: "POST",
             headers: {

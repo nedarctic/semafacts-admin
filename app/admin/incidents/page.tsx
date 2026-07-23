@@ -34,7 +34,7 @@ export default async function IncidentsPage({ searchParams }: {
     params.set("limit", limit);
     search && params.set("search", search);
 
-    const url = `${process.env.BACKEND_API_URL}/companies/${companyId}/incidents?${params.toString()}`;
+    const url = `${process.env.BACKEND_URL}/companies/${companyId}/incidents?${params.toString()}`;
     const res = await fetch(url, {
         method: "GET",
         headers: {

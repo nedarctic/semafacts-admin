@@ -10,7 +10,7 @@ export default async function IncidentTrackingPage() {
     }
     const { incidentId, accessToken } = session;
 
-    const url = `${process.env.BACKEND_API_URL}/incidents/${incidentId}`;
+    const url = `${process.env.BACKEND_URL}/incidents/${incidentId}`;
     const res = await fetch(url, {
         method: "GET",
         headers: {

@@ -13,7 +13,7 @@ export default async function SettingsPage() {
     const { accessToken, user } = session;
     const { companyId } = user;
 
-    const url = `${process.env.BACKEND_API_URL}/companies/${companyId}`;
+    const url = `${process.env.BACKEND_URL}/companies/${companyId}`;
     const res = await fetch(url, {
         method: "GET",
         headers: {
