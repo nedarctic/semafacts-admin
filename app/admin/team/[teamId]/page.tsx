@@ -6,6 +6,10 @@ import { User } from "@/lib/types/user";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 import { getHandlerIncidents } from "@/lib/helpers/handlers.helpers";
+import { UserStatus } from "@/lib/enums/user-status.enum";
+import { DeactivateMemberDialog } from "@/components/deactivate-member-dialog";
+import { EditUserDrawer } from "@/components/edit-user-drawer";
+import { UserRole } from "@/lib/enums/user-role.enum";
 
 export default async function TeamMemberDetailsPage({ params }: {
     params: Promise<{
@@ -16,7 +20,8 @@ export default async function TeamMemberDetailsPage({ params }: {
     if (!session) {
         redirect("/admin-login");
     }
-    const { accessToken } = session;
+    const { accessToken, user } = session;
+    const { id: userId } = user;
     const { teamId } = await params;
 
     const url = `${process.env.BACKEND_URL}/users/${teamId}`;
@@ -46,7 +51,17 @@ export default async function TeamMemberDetailsPage({ params }: {
     }
 
     const member: User = await res.json();
-console.log("member email", member.email)
+    const data = {
+        id: member.id,
+        name: member.name,
+        email: member.email,
+        role: member.role
+    } as {
+        id: string;
+        name: string;
+        email: string;
+        role: UserRole;
+    }
     return (
         <div className="min-h-screen flex flex-col gap-6">
             <BreadCrumb crumbs={crumbs} currentPage="Team Member Details" />
@@ -64,7 +79,12 @@ console.log("member email", member.email)
                         <div className="flex flex-col gap-6 border-2 border-mist-500 rounded-2xl min-h-screen p-6">
                             <div className="flex flex-row justify-between">
                                 <p className="font-semibold text-lg">Overview</p>
-                                <InviteHandlerDialog email={member.email} />
+                                <div className="flex flex-row gap-2">
+                                    {member.status !== UserStatus.ACTIVE ?
+                                        <InviteHandlerDialog email={member.email} /> :
+                                        userId !== member.id ? <DeactivateMemberDialog memberId={member.id} /> : ""}
+                                    <EditUserDrawer data={data} />
+                                </div>
                             </div>
                             <div>
                                 <ul className="list-disc pl-4">
