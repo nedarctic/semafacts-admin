@@ -33,7 +33,7 @@ export default async function ReportingPage() {
                 <BreadCrumb currentPage="Reporting Page" />
                 <div className="flex flex-col gap-6">
                     <p className="text-2xl">Reporting Page</p>
-                    <p className="text-md font-medium">Could not fetch the reporting page details. Please refresh the page or try again later.</p>
+                    <p className="text-md">Could not fetch the reporting page details. Please refresh the page or try again later.</p>
                 </div>
             </div>
         );
