@@ -15,7 +15,7 @@ export async function POST(req: NextRequest) {
 
         console.log("invite body", body)
 
-        const url = `${process.env.BACKEND_URL}/invites/${companyId}`;
+        const url = `${process.env.BACKEND_URL}/invites/create/${companyId}`;
 
         const res = await fetch(url, {
             method: "POST",
