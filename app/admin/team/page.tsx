@@ -46,9 +46,9 @@ export default async function TeamPage({ searchParams }: {
         return (
             <div className="min-h-screen flex flex-col gap-6">
                 <BreadCrumb currentPage="Team" />
-                <div>
+                <div className="flex flex-col gap-6">
                     <p className="text-2xl">Team</p>
-                    <p className="font-medium text-md">Could not fetch the team data. Refresh the page or try again later.</p>
+                    <p className="text-md">Could not fetch the team data. Refresh the page or try again later.</p>
                 </div>
             </div>
         )
