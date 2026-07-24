@@ -60,7 +60,7 @@ export function AssignHandlersDrawer({ nonIncidentHandlers }: { nonIncidentHandl
             <DrawerHeader>
                 <DrawerTitle>Assign New Handler</DrawerTitle>
             </DrawerHeader>
-            <RadioGroup
+            {nonIncidentHandlers.length ? <RadioGroup
                 value={email}
                 onValueChange={setEmail}
                 className="space-y-3 p-4"
@@ -86,9 +86,9 @@ export function AssignHandlersDrawer({ nonIncidentHandlers }: { nonIncidentHandl
                         </div>
                     );
                 })}
-            </RadioGroup>
+            </RadioGroup> : <p className="text-sm p-4">No handlers available for this incident at the moment.</p>}
             <DrawerFooter>
-                <Button onClick={clickHandler}>{loading ? <Spinner size={8} /> : "Send Invite"}</Button>
+                {nonIncidentHandlers.length ? <Button onClick={clickHandler}>{loading ? <Spinner size={8} /> : "Send Invite"}</Button> : ""}
                 <DrawerClose render={<Button variant="outline">Cancel</Button>} />
             </DrawerFooter>
         </DrawerContent>

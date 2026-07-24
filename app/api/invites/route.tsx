@@ -13,6 +13,8 @@ export async function POST(req: NextRequest) {
 
         const body = await req.json();
 
+        console.log("invite body", body)
+
         const url = `${process.env.BACKEND_URL}/invites/${companyId}`;
 
         const res = await fetch(url, {

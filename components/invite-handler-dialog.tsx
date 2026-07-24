@@ -20,6 +20,7 @@ export function InviteHandlerDialog({ email }: { email: string }) {
 
     const router = useRouter();
     const [loading, setLoading] = useState<boolean>(false);
+    const [open, setOpen] = useState<boolean>(false);
 
     const handleInviteMember = async () => {
         try {
@@ -45,6 +46,7 @@ export function InviteHandlerDialog({ email }: { email: string }) {
             }
 
             setLoading(false);
+            setOpen(false);
             toast.success("Invite successfully sent. Once the member accepts it they will have access to incidents to manage.");
             router.refresh();
 
@@ -54,7 +56,7 @@ export function InviteHandlerDialog({ email }: { email: string }) {
         }
     }
 
-    return <Dialog>
+    return <Dialog open={open} onOpenChange={setOpen}>
         <DialogTrigger render={<Button variant="ghost"><PlusIcon size={16} />Invite Member</Button>} />
         <DialogContent>
             <DialogHeader>

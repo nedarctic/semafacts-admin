@@ -46,7 +46,7 @@ export default async function TeamMemberDetailsPage({ params }: {
     }
 
     const member: User = await res.json();
-
+console.log("member email", member.email)
     return (
         <div className="min-h-screen flex flex-col gap-6">
             <BreadCrumb crumbs={crumbs} currentPage="Team Member Details" />
