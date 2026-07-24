@@ -48,7 +48,7 @@ export default async function IncidentsPage({ searchParams }: {
                 <BreadCrumb currentPage="Incidents" />
                 <div className="flex flex-col gap-6">
                     <p className="text-2xl">Incidents</p>
-                    <p className="text-md font-medium">Failed to fetch incidents. Refresh the page or try again later.</p>
+                    <p className="text-md">Failed to fetch incidents. Refresh the page or try again later.</p>
                 </div>
             </div>
         )
