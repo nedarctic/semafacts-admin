@@ -53,6 +53,7 @@ export default async function IncidentDetailsPage({ params }: { params: Promise<
     };
 
     const incident: Incident = await res.json();
+    console.log("incident handlers", incident.handlers);
 
     return (
         <div className="min-h-screen flex flex-col gap-6">
@@ -92,7 +93,7 @@ export default async function IncidentDetailsPage({ params }: { params: Promise<
                         <div className="flex flex-col gap-6 border-2 border-mist-500 rounded-2xl min-h-screen p-6">
                             <div className="flex flex-row justify-between">
                                 <p className="font-semibold text-lg">Handlers</p>
-                                <AssignHandlersDrawer nonIncidentHandlers={nonIncidentHandlers!} />
+                                <AssignHandlersDrawer incidentId={incidentId} nonIncidentHandlers={nonIncidentHandlers!} />
                             </div>
                             <div className="flex flex-col space-y-2">
                                 {incident.handlers?.length ? <ul className="list-disc pl-4">
