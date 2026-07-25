@@ -18,19 +18,23 @@ import { RadioGroup, RadioGroupItem } from "./ui/radio-group";
 import { Spinner } from "./ui/spinner";
 import { useRouter } from "next/navigation";
 
-export function AssignHandlersDrawer({ nonIncidentHandlers }: { nonIncidentHandlers: User[] }) {
+export function AssignHandlersDrawer({ nonIncidentHandlers, incidentId }: { nonIncidentHandlers: User[], incidentId: string }) {
     const router = useRouter();
 
-    const [email, setEmail] = useState<string>();
+    const [id, setId] = useState<string>();
     const [loading, setLoading] = useState<boolean>(false);
     const [open, setOpen] = useState<boolean>(false);
 
-    console.log("email", email);
-
     const clickHandler = async () => {
         try {
+
             setLoading(true);
-            const url = `/api/invites`;
+            const [email] = nonIncidentHandlers.filter(handler => handler.id === id).map(handler => handler.email);
+            const params = new URLSearchParams();
+            params.append("handlerId", id!);
+            params.append("incidentId", incidentId);
+
+            const url = `/api/handlers?${params.toString()}`;
             const res = await fetch(url, {
                 method: "POST",
                 headers: {
@@ -38,7 +42,9 @@ export function AssignHandlersDrawer({ nonIncidentHandlers }: { nonIncidentHandl
                 },
                 body: JSON.stringify({ email })
             });
-            if (!res.ok) {
+
+            const { success } = await res.json();
+            if (!res.ok || !success) {
                 setLoading(false);
                 setOpen(false);
                 toast.error("Failed to invite member");
@@ -61,8 +67,8 @@ export function AssignHandlersDrawer({ nonIncidentHandlers }: { nonIncidentHandl
                 <DrawerTitle>Assign New Handler</DrawerTitle>
             </DrawerHeader>
             {nonIncidentHandlers.length ? <RadioGroup
-                value={email}
-                onValueChange={setEmail}
+                value={id}
+                onValueChange={setId}
                 className="space-y-3 p-4"
             >
                 {nonIncidentHandlers.map((handler) => {
@@ -75,7 +81,7 @@ export function AssignHandlersDrawer({ nonIncidentHandlers }: { nonIncidentHandl
                         >
                             <RadioGroupItem
                                 id={id}
-                                value={handler.email}
+                                value={handler.id}
                             />
                             <label
                                 htmlFor={id}
