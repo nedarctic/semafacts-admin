@@ -21,7 +21,7 @@ import { useRouter } from "next/navigation";
 export function AssignHandlersDrawer({ nonIncidentHandlers, incidentId }: { nonIncidentHandlers: User[], incidentId: string }) {
     const router = useRouter();
 
-    const [id, setId] = useState<string>();
+    const [id, setId] = useState<string>("");
     const [loading, setLoading] = useState<boolean>(false);
     const [open, setOpen] = useState<boolean>(false);
 
@@ -29,7 +29,14 @@ export function AssignHandlersDrawer({ nonIncidentHandlers, incidentId }: { nonI
         try {
 
             setLoading(true);
-            const [email] = nonIncidentHandlers.filter(handler => handler.id === id).map(handler => handler.email);
+            const handler = nonIncidentHandlers.find(h => h.id === id);
+
+            if (!handler) {
+                toast.error("Please select a handler.");
+                return;
+            }
+
+            const email = handler.email;
             const params = new URLSearchParams();
             params.append("handlerId", id!);
             params.append("incidentId", incidentId);
@@ -53,6 +60,7 @@ export function AssignHandlersDrawer({ nonIncidentHandlers, incidentId }: { nonI
             setOpen(false);
             toast.success("Invite successfully sent. Once the handler accepts the invite, they will be listed under handlers for this incident.");
             router.refresh();
+
         } catch (error) {
             setLoading(false);
             setOpen(false);

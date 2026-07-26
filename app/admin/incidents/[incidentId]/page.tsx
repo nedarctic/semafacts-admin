@@ -16,6 +16,8 @@ import { getNonIncidentHandlers } from "@/lib/helpers/incidents.helpers";
 import { AssignHandlersDrawer } from "@/components/assign-handlers-drawer";
 import { AddEvidenceDrawer } from "@/components/add-evidence-drawer";
 import { AttachmentUploader } from "@/lib/enums/attachment-uploader.enum";
+import { MessagesAdminComponent } from "@/components/messages-admin";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 
 export default async function IncidentDetailsPage({ params }: { params: Promise<{ incidentId: string }> }) {
     const session = await getServerSession(authOptions);
@@ -73,21 +75,54 @@ export default async function IncidentDetailsPage({ params }: { params: Promise<
                             <div className="flex flex-row justify-between">
                                 <p className="font-semibold text-lg">Overview</p>
                             </div>
-                            <div className="flex flex-col gap-2">
-                                <ul className="list-disc pl-4 space-y-2">
-                                    <li className="text-md">Status: <span className="font-medium">{incident.status}</span></li>
-                                    <li className="text-md">Incident ID: <span className="font-medium">{incident.incidentIdDisplay}</span></li>
-                                    <li className="text-md">Category: <span className="font-medium">{incident.category}</span></li>
-                                    <li className="text-md">Description: <span className="font-medium">{incident.description}</span></li>
-                                    <li className="text-md">Location: <span className="font-medium">{incident.location}</span></li>
-                                    <li className="text-md">Duration: <span className="font-medium">{incident.duration}</span></li>
-                                    <li className="text-md">People involved: <span className="font-medium">{incident.involvedPeople}</span></li>
-                                    <li className="text-md">Date: <span className="font-medium">{incident.incidentDate}</span></li>
-                                    <li className="text-md">Reporter type: <span className="font-medium">{incident.reporterType}</span></li>
-                                    <li className="text-md">Created: <span className="font-medium">{new Date(incident.createdAt).toLocaleDateString('en-KE', { day: '2-digit', month: 'short', year: 'numeric' })}</span></li>
-                                    <li className="text-md">Deadline: <span className="font-medium">{incident.deadlineAt ? new Date(incident.deadlineAt!).toLocaleDateString('en-KE', { day: '2-digit', month: 'short', year: 'numeric' }) : "Not set"}</span></li>
-                                </ul>
-                            </div>
+                            <Table>
+                                <TableBody>
+                                    <TableRow>
+                                        <TableHead>Status</TableHead>
+                                        <TableCell>{incident.status}</TableCell>
+                                    </TableRow>
+                                    <TableRow>
+                                        <TableHead>Incident ID</TableHead>
+                                        <TableCell>{incident.incidentIdDisplay}</TableCell>
+                                    </TableRow>
+                                    <TableRow>
+                                        <TableHead>Category</TableHead>
+                                        <TableCell>{incident.category}</TableCell>
+                                    </TableRow>
+                                    <TableRow>
+                                        <TableHead>Description</TableHead>
+                                        <TableCell>{incident.description}</TableCell>
+                                    </TableRow>
+                                    <TableRow>
+                                        <TableHead>Location</TableHead>
+                                        <TableCell>{incident.location}</TableCell>
+                                    </TableRow>
+                                    <TableRow>
+                                        <TableHead>Duration</TableHead>
+                                        <TableCell>{incident.duration}</TableCell>
+                                    </TableRow>
+                                    <TableRow>
+                                        <TableHead>People Involved</TableHead>
+                                        <TableCell>{incident.involvedPeople}</TableCell>
+                                    </TableRow>
+                                    <TableRow>
+                                        <TableHead>Date</TableHead>
+                                        <TableCell>{incident.incidentDate}</TableCell>
+                                    </TableRow>
+                                    <TableRow>
+                                        <TableHead>Reporter Type</TableHead>
+                                        <TableCell>{incident.reporterType}</TableCell>
+                                    </TableRow>
+                                    <TableRow>
+                                        <TableHead>Created</TableHead>
+                                        <TableCell>{new Date(incident.createdAt!).toLocaleDateString("en-KE", { day: "2-digit", month: "short", year: "numeric" })}</TableCell>
+                                    </TableRow>
+                                    <TableRow>
+                                        <TableHead>Deadline</TableHead>
+                                        <TableCell>{new Date(incident.deadlineAt!).toLocaleDateString("en-KE", { day: "2-digit", month: "short", year: "numeric" })}</TableCell>
+                                    </TableRow>
+                                </TableBody>
+                            </Table>
                         </div>
                     </TabsContent>
                     <TabsContent value="handlers">
@@ -96,11 +131,16 @@ export default async function IncidentDetailsPage({ params }: { params: Promise<
                                 <p className="font-semibold text-lg">Handlers</p>
                                 <AssignHandlersDrawer incidentId={incidentId} nonIncidentHandlers={nonIncidentHandlers!} />
                             </div>
-                            <div className="flex flex-col space-y-2">
-                                {incident.handlers?.length ? <ul className="list-disc pl-4">
-                                    {incident.handlers?.map((handler, index) => <li key={index} className="font-medium">{handler?.handler?.name!}</li>)}
-                                </ul> : <p className="font-semibold text-md">No handlers assigned to this incident yet.</p>}
-                            </div>
+
+                            {incident.handlers?.length ?
+                                <Table>
+                                    <TableBody>
+                                        {incident.handlers?.map((handler, index) => <TableRow key={index} className="font-medium"><TableCell>{handler?.handler?.name!}</TableCell></TableRow>)}
+                                    </TableBody>
+                                </Table>
+                                :
+                                <p className="font-semibold text-md">No handlers assigned to this incident yet.</p>}
+
                         </div>
                     </TabsContent>
                     <TabsContent value="messages">
@@ -109,9 +149,7 @@ export default async function IncidentDetailsPage({ params }: { params: Promise<
                                 <p className="font-semibold text-lg">Messages</p>
                             </div>
                             <div className="flex flex-col space-y-2">
-                                {incident.messages?.length ? <ul className="list-disc pl-4">
-                                    {incident.messages?.map((message, index) => <li key={index} className="font-medium">{message?.content}</li>)}
-                                </ul> : <p className="font-semibold text-md">No conversation on this incident yet.</p>}
+                                {incident.messages?.length ? <MessagesAdminComponent messages={incident.messages} /> : <p className="font-semibold text-md">No conversation on this incident yet.</p>}
                             </div>
                         </div>
                     </TabsContent>
@@ -121,22 +159,22 @@ export default async function IncidentDetailsPage({ params }: { params: Promise<
                                 <p className="font-semibold text-lg">Attachments</p>
                                 <AddEvidenceDrawer incidentId={incidentId} attachmentUploader={AttachmentUploader.SuperAdmin} />
                             </div>
-                            <div className="flex flex-col gap-2">
-                                <ul className="flex flex-col gap-3 list-decimal pl-4">
-                                    {incident.attachments?.map((attachment, index) =>
-                                        <li key={index}>
-                                            <div className="flex flex-col gap-2">
-                                                <Link
-                                                    className="text-semibold"
-                                                    target="_blank"
-                                                    href={attachment.fileUrl}>{attachment.mimeType} attachment
-                                                </Link>
-                                                <p className="text-md">Uploaded by <span className="text-md font-medium">{attachment.uploadedBy}</span></p>
-                                            </div>
-                                        </li>
-                                    )}
-                                </ul>
-                            </div>
+
+                            {incident.attachments ?
+                                <Table>
+                                    <TableHeader>
+                                        <TableRow>
+                                            <TableHead>Evidence Type</TableHead>
+                                            <TableHead>Uploaded By</TableHead>
+                                        </TableRow>
+                                        {incident.attachments.map((attachment, index) => <TableRow key={index}>
+                                            <TableCell>{attachment.mimeType}</TableCell>
+                                            <TableCell>{attachment.uploadedBy}</TableCell>
+                                        </TableRow>)}
+                                    </TableHeader>
+                                </Table> :
+                                <p className="font-semibold text-md">No attachments to this incident yet.</p>
+                            }
                         </div>
                     </TabsContent>
                 </Tabs>

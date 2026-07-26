@@ -1,5 +1,6 @@
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { BreadCrumb } from "@/components/breadcrumb";
+import { Table, TableBody, TableCell, TableHead, TableRow } from "@/components/ui/table";
 import { UpdateCompanyDrawer } from "@/components/update-company-drawer";
 import { Company } from "@/lib/types/company";
 import { getServerSession } from "next-auth";
@@ -49,14 +50,22 @@ export default async function SettingsPage() {
                     <p className="text-2xl">Settings</p>
                     <UpdateCompanyDrawer data={data} />
                 </div>
-                <ul className="list-disc pl-4 space-y-2">
-                    <li className="text-md">Company name: <span className="font-medium">{company.name}</span></li>
-                    <li className="text-md">SLA days: <span className="font-medium">{company.slaDays}</span></li>
-                </ul>
-                <h1 className="font-semibold text-lg">Company Logo</h1>
-                {logoUrl ? <div className="relative aspect-square max-w-xl">
-                    <Image src={logoUrl} unoptimized alt="Company logo" fill className="rounded-md" />
-                </div> : <p className="font-medium text-md">Not set.</p>}
+                <Table>
+                    <TableBody>
+                        <TableRow>
+                            <TableHead>Company Name</TableHead>
+                            <TableCell>{company.name}</TableCell>
+                        </TableRow>
+                        <TableRow>
+                            <TableHead>SLA Days</TableHead>
+                            <TableCell>{company.slaDays}</TableCell>
+                        </TableRow>
+                        <TableRow>
+                            <TableHead>Logo</TableHead>
+                            <TableCell>{company.logoUrl ? <p className="font-medium">Set</p> : <p className="font-medium">Not set</p>}</TableCell>
+                        </TableRow>
+                    </TableBody>
+                </Table>
             </div>
         </div>
     )

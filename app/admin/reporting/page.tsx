@@ -8,6 +8,7 @@ import { type ReportingPage } from "@/lib/types/reporting-page";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 import { getCategories } from "@/lib/helpers/categories.helpers";
+import { Table, TableBody, TableCell, TableHead, TableRow } from "@/components/ui/table";
 
 export default async function ReportingPage() {
 
@@ -62,12 +63,26 @@ export default async function ReportingPage() {
                                 <UpdateReportingPageDrawer data={reportingPage} />
                             </div>
 
-                            <ul className="list-disc pl-4 space-y-2">
-                                <li className="text-md">Title: <span className="font-medium">{reportingPage.title ? reportingPage.title : "Not set"}</span></li>
-                                <li className="text-md">Reporting page URL: <span className="font-medium">{reportingPage.reportingPageUrl ? reportingPage.reportingPageUrl : "Not set"}</span></li>
-                                <li className="text-md">Reporting page introduction: <span className="font-medium">{reportingPage.introContent ? reportingPage.introContent : "Not set"}</span></li>
-                                <li className="text-md">Policy URL: <span className="font-medium">{reportingPage.policyUrl ? reportingPage.policyUrl : "Not set"}</span></li>
-                            </ul>
+                            <Table>
+                                <TableBody>
+                                    <TableRow>
+                                        <TableHead>Title</TableHead>
+                                        <TableCell>{reportingPage.title ? reportingPage.title : "Not set"}</TableCell>
+                                    </TableRow>
+                                    <TableRow>
+                                        <TableHead>Page URL</TableHead>
+                                        <TableCell>{reportingPage.reportingPageUrl ? reportingPage.reportingPageUrl : "Not set"}</TableCell>
+                                    </TableRow>
+                                    <TableRow>
+                                        <TableHead>Introduction</TableHead>
+                                        <TableCell>{reportingPage.introContent ? reportingPage.introContent : "Not set"}</TableCell>
+                                    </TableRow>
+                                    <TableRow>
+                                        <TableHead>Policy URL</TableHead>
+                                        <TableCell>{reportingPage.policyUrl ? reportingPage.policyUrl : "Not set"}</TableCell>
+                                    </TableRow>
+                                </TableBody>
+                            </Table>
                         </div>
                     </TabsContent>
                     <TabsContent value="categories">
@@ -77,9 +92,15 @@ export default async function ReportingPage() {
                                 <UpdateCategoriesDrawer data={categories!} />
                             </div>
 
-                            <ul className="list-disc pl-4 space-y-2">
-                                {categories?.map((category, index) => <li key={index} className="text-md">{category.categoryName}</li>)}
-                            </ul>
+                            <Table>
+                                <TableBody>
+                                    {categories?.map((category, index) =>
+                                        <TableRow key={index} className="text-md">
+                                            <TableCell>{category.categoryName}</TableCell>
+                                        </TableRow>
+                                    )}
+                                </TableBody>
+                            </Table>
                         </div>
                     </TabsContent>
                 </Tabs>

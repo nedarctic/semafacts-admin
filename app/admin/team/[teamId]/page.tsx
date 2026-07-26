@@ -10,6 +10,7 @@ import { UserStatus } from "@/lib/enums/user-status.enum";
 import { DeactivateMemberDialog } from "@/components/deactivate-member-dialog";
 import { EditUserDrawer } from "@/components/edit-user-drawer";
 import { UserRole } from "@/lib/enums/user-role.enum";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 
 export default async function TeamMemberDetailsPage({ params }: {
     params: Promise<{
@@ -32,7 +33,11 @@ export default async function TeamMemberDetailsPage({ params }: {
         }
     });
 
-    const { success, data: handlerIncidents, error } = await getHandlerIncidents(accessToken, teamId);
+    const handlerIncidentsUrl = `${process.env.BACKEND_URL}/handlers/${teamId}/incidents/non-paginated`;
+
+    const { success, data: handlerIncidents, error } = await getHandlerIncidents(accessToken, handlerIncidentsUrl);
+
+    console.log("handler incidents", handlerIncidents);
 
     const crumbs = [
         { label: "Team", link: "/admin/team" }
@@ -86,15 +91,26 @@ export default async function TeamMemberDetailsPage({ params }: {
                                     <EditUserDrawer data={data} />
                                 </div>
                             </div>
-                            <div>
-                                <ul className="list-disc pl-4">
-                                    <li className="text-md">Name: <span className="font-semibold">{member.name}</span></li>
-                                    <li className="text-md">Email: <span className="font-semibold">{member.email}</span></li>
-                                    <li className="text-md">Status: <span className="font-semibold">{member.status}</span></li>
-                                    <li className="text-md">Role: <span className="font-semibold">{member.role}</span></li>
-                                </ul>
-                            </div>
-
+                            <Table>
+                                <TableBody>
+                                    <TableRow>
+                                        <TableHead>Name</TableHead>
+                                        <TableCell>{member.name}</TableCell>
+                                    </TableRow>
+                                    <TableRow>
+                                        <TableHead>Email</TableHead>
+                                        <TableCell>{member.email}</TableCell>
+                                    </TableRow>
+                                    <TableRow>
+                                        <TableHead>Status</TableHead>
+                                        <TableCell>{member.status}</TableCell>
+                                    </TableRow>
+                                    <TableRow>
+                                        <TableHead>Role</TableHead>
+                                        <TableCell>{member.role}</TableCell>
+                                    </TableRow>
+                                </TableBody>
+                            </Table>
                         </div>
                     </TabsContent>
                     <TabsContent value="incidents">
@@ -103,15 +119,22 @@ export default async function TeamMemberDetailsPage({ params }: {
                                 <p className="font-semibold text-lg">Incidents</p>
                             </div>
                             <div>
-                                {handlerIncidents?.length ? <ul className="list-decimal pl-4">
-                                    {handlerIncidents?.map((incident, index) => <li key={index}>
-                                        <div>
-                                            <p className="text-md">ID: <span className="font-semibold">{incident.incidentIdDisplay}</span></p>
-                                            <p className="text-md">Category: <span className="font-semibold">{incident.category}</span></p>
-                                            <p className="text-md">Status: <span className="font-semibold">{incident.status}</span></p>
-                                        </div>
-                                    </li>)}
-                                </ul> : <p>No incidents assigned to this handler yet.</p>}
+                                {handlerIncidents?.length ? <Table>
+                                            <TableHeader>
+                                                <TableRow>
+                                                    <TableHead>ID</TableHead>
+                                                    <TableHead>Category</TableHead>
+                                                    <TableHead>Status</TableHead>
+                                                </TableRow>
+                                            </TableHeader>
+                                            <TableBody>
+                                                {handlerIncidents.map((incident, index) => <TableRow key={index}>
+                                                    <TableCell>{incident.incidentIdDisplay}</TableCell>
+                                                    <TableCell>{incident.category}</TableCell>
+                                                    <TableCell>{incident.status}</TableCell>
+                                                </TableRow> )}
+                                            </TableBody>
+                                        </Table> : <p>No incidents assigned to this handler yet.</p>}
                             </div>
                         </div>
                     </TabsContent>
