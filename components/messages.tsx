@@ -15,13 +15,14 @@ import { Message as IncidentMessage } from "@/lib/types/message";
 import { SenderType } from "@/lib/enums/sender-type.enum";
 import { Spinner } from "./ui/spinner";
 import z from "zod";
+import { Field, FieldError } from "./ui/field";
 
 
-export function Messages({ 
-    initialMessages, 
-    senderType, 
-    incidentId, 
-    userId 
+export function Messages({
+    initialMessages,
+    senderType,
+    incidentId,
+    userId
 }: {
     initialMessages: IncidentMessage[],
     senderType: SenderType,
@@ -32,12 +33,6 @@ export function Messages({
     const [messages, setMessages] = useState(initialMessages);
     const [message, setMessage] = useState<string>("");
     const [errors, setErrors] = useState<any>({});
-
-    const isMe = (senderType: SenderType) => {
-
-    }
-
-    const [isBusy, setIsBusy] = useState<boolean>(false);
 
     const updateMessages = () => {
 
@@ -65,6 +60,8 @@ export function Messages({
             }
 
             updateMessages();
+            setMessage("");
+            
             const url = `/api/messages/${incidentId}`;
 
             const res = await fetch(url, {
@@ -91,7 +88,7 @@ export function Messages({
             }
 
             setLoading(false);
-            setMessage("");
+            
 
         } catch {
             setLoading(false);
@@ -124,7 +121,6 @@ export function Messages({
                             <MessageScroller>
                                 <MessageScrollerViewport>
                                     <MessageScrollerContent
-                                        aria-busy={isBusy}
                                         className="p-(--card-spacing)"
                                     >
                                         {messages.map(({ content, senderType: sender }, index) => {
@@ -150,7 +146,12 @@ export function Messages({
                             id="messages-form"
                             onSubmit={submitHandler}
                             className="flex flex-col items-end gap-2 w-full">
-                            <Textarea placeholder={"New message"} value={message} onChange={e => setMessage(e.target.value)} />
+                            <Field>
+                                <Textarea placeholder={"New message"} value={message} onChange={e => setMessage(e.target.value)} />
+                                {errors?.properties?.message?.errors?.length ? 
+                                errors.properties.message.errors.map((error: string, index: number) => 
+                                <FieldError key={index}>{error}</FieldError>): ""}
+                            </Field>
                             <Button form="messages-form" type="submit" disabled={loading}>{loading ? <Spinner size={8} /> : <ArrowUpIcon size={16} />}</Button>
                         </Form>
                     </CardFooter>
