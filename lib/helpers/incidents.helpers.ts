@@ -1,3 +1,4 @@
+import { Incident } from "../types/incident";
 import { IncidentHandler } from "../types/incident-handler";
 import { Message } from "../types/message";
 import { User } from "../types/user";
@@ -40,7 +41,7 @@ export async function getNonIncidentHandlers(
             success: false,
             error: error instanceof Error ? error.message : String(error)
         }
-        
+
     }
 }
 
@@ -50,7 +51,7 @@ export async function getIncidentHandlers(
 ): Promise<{ success: boolean; data?: IncidentHandler[]; error?: string }> {
     try {
         const url = `${process.env.BACKEND_URL}/incidents/${incidentId}/handlers`;
-        
+
         const res = await fetch(url, {
             method: "GET",
             headers: {
@@ -99,7 +100,7 @@ export async function getIncidentMessages(
         });
 
         const data = await res.json();
-        
+
         if (!res.json) {
             return {
                 success: false,
@@ -111,6 +112,42 @@ export async function getIncidentMessages(
             success: true,
             data
         };
+
+    } catch (error) {
+        return {
+            success: false,
+            error: error instanceof Error ? error.message : String(error)
+        }
+    }
+}
+
+export async function getIncident(accessToken: string, incidentId: string): Promise<{
+    success: boolean;
+    data?: Incident;
+    error?: string;
+}> {
+    try {
+        const url = `${process.env.BACKEND_URL}/incidents/${incidentId}`;
+        const res = await fetch(url, {
+            method: "GET",
+            headers: {
+                Authorization: `Bearer ${accessToken}`
+            }
+        });
+
+        const data = await res.json();
+
+        if (!res.ok) {
+            return {
+                success: false,
+                error: data.message
+            }
+        }
+
+        return {
+            success: true,
+            data
+        }
 
     } catch (error) {
         return {
