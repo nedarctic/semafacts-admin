@@ -21,10 +21,10 @@ export function UpdateIncidentHandlerDrawer({ incident, categories }: { incident
     const router = useRouter();
 
     const [status, setStatus] = useState<IncidentStatus>(incident.status);
-    const [category, setCategory] = useState<string>();
+    const [category, setCategory] = useState<string>(incident.category!);
 
     const [loading, setLoading] = useState<boolean>();
-    const [open, setOpen] = useState<boolean>(false);    
+    const [open, setOpen] = useState<boolean>(false);
 
     const statusItems = Object.values(IncidentStatus).map(status => ({ label: statusLabels[status], value: status }));
     const categoryItems = categories.map(category => ({ label: category.categoryName, value: category.categoryName }))
@@ -66,12 +66,14 @@ export function UpdateIncidentHandlerDrawer({ incident, categories }: { incident
                 <DrawerDescription>Update the incidents status or category</DrawerDescription>
             </DrawerHeader>
             <Form onSubmit={submitHandler}
-            id="update-incident-form"
+                id="update-incident-form"
                 className="flex flex-col p-4 gap-4">
                 <Field>
                     <FieldLabel>Incident category</FieldLabel>
                     <Select items={statusItems}
-                        defaultValue={status} onValueChange={value => setStatus(value!)}>
+                        defaultValue={status}
+                        onValueChange={value => setStatus(value!)}
+                    >
                         <SelectTrigger>
                             <SelectValue />
                         </SelectTrigger>
@@ -86,7 +88,10 @@ export function UpdateIncidentHandlerDrawer({ incident, categories }: { incident
 
                 <Field>
                     <FieldLabel>Incident category</FieldLabel>
-                    <Select items={categoryItems} defaultValue={category} onValueChange={value => setCategory(value!)}>
+                    <Select items={categoryItems}
+                        defaultValue={category}
+                        onValueChange={value => setCategory(value!)}
+                    >
                         <SelectTrigger className="w-45">
                             <SelectValue />
                         </SelectTrigger>
