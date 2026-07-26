@@ -91,7 +91,7 @@ export async function getIncidentMessages(
 }> {
     try {
 
-        const url = `${process.env.BACKEND_URL}/incidents/${incidentId}/messages`;
+        const url = `${process.env.BACKEND_URL}/messages/${incidentId}`;
         const res = await fetch(url, {
             method: "GET",
             headers: {
