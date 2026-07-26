@@ -1,12 +1,19 @@
 import { Incident } from "../types/incident";
 
-export async function getHandlerIncidents (accessToken: string, handlerId: string): Promise<{
+export async function getHandlerIncidents(accessToken: string, url: string): Promise<{
     success: boolean;
-    data?: Incident[];
+    data?: {
+        incidents: Incident[];
+        meta: {
+            page: number;
+            limit: number;
+            total: number;
+            totalPages: number;
+        }
+    };
     error?: string;
 }> {
-    try {
-        const url = `${process.env.BACKEND_URL}/handlers/${handlerId}/incidents`;
+    try {        
         const res = await fetch(url, {
             method: "GET",
             headers: {
@@ -16,7 +23,7 @@ export async function getHandlerIncidents (accessToken: string, handlerId: strin
 
         const data = await res.json();
 
-        if(!res.ok){
+        if (!res.ok) {
             return {
                 success: false,
                 error: data.error || data.message || "Backend request error"
@@ -27,7 +34,7 @@ export async function getHandlerIncidents (accessToken: string, handlerId: strin
             success: true,
             data
         }
-        
+
     } catch (error) {
         return {
             success: false,
