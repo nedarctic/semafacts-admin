@@ -1,15 +1,18 @@
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { AddEvidenceDrawer } from "@/components/add-evidence-drawer";
 import { BreadCrumb } from "@/components/breadcrumb";
+import { Messages } from "@/components/messages";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { UpdateIncidentHandlerDrawer } from "@/components/update-incident-handler";
 import { AttachmentUploader } from "@/lib/enums/attachment-uploader.enum";
+import { SenderType } from "@/lib/enums/sender-type.enum";
 import { getCategories } from "@/lib/helpers/categories.helpers";
 import { getIncident } from "@/lib/helpers/incidents.helpers";
 import { statusLabels } from "@/lib/mappers";
 import { getServerSession } from "next-auth";
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import { getIncidentMessages } from "@/lib/helpers/incidents.helpers";
 
 export default async function IncidentDetailPage({ params }: { params: Promise<{ incidentId: string }> }) {
     const session = await getServerSession(authOptions);
@@ -21,8 +24,10 @@ export default async function IncidentDetailPage({ params }: { params: Promise<{
     const { incidentId } = await params;
 
     const { data: incident, success } = await getIncident(accessToken, incidentId);
-    const { success: categoriesSuccess, data: categories } = await getCategories(accessToken, companyId);
+    const { data: categories } = await getCategories(accessToken, companyId);
+    const { data: incidentMessages } = await getIncidentMessages(accessToken, incidentId);
 
+    console.log("incident messages", incidentMessages);
     console.log("categories", categories);
 
     const crumbs = [
@@ -76,14 +81,14 @@ export default async function IncidentDetailPage({ params }: { params: Promise<{
                         </div>
                     </TabsContent>
                     <TabsContent value="messages">
-                        <div className="flex flex-col gap-6 border-2 border-mist-500 rounded-2xl min-h-screen p-6">
-                            <div className="flex flex-row justify-between">
-                                <p className="font-semibold text-lg">Messages</p>
-                            </div>
+                        <div className="flex flex-col gap-6 min-h-screen">
                             <div className="flex flex-col space-y-2">
-                                {incident?.messages?.length ? <ul className="list-disc pl-4">
-                                    {incident?.messages?.map((message, index) => <li key={index} className="font-medium">{message?.content}</li>)}
-                                </ul> : <p className="font-semibold text-md">No conversation on this incident yet.</p>}
+                                <Messages
+                                    userId={user.id}
+                                    incidentId={incident?.id!}
+                                    senderType={SenderType.Handler}
+                                    initialMessages={incidentMessages!}
+                                />
                             </div>
                         </div>
                     </TabsContent>
