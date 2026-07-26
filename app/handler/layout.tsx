@@ -16,18 +16,20 @@ export default async function HandlerPortalLayout({ children }: { children: Reac
 
     const links = [
         { label: "Incidents", url: "/handler", icon: <ListIcon size={16} /> },
-        { label: "Notifications", url: "/handler/notifications", icon: <BellIcon size={16} /> },
         { label: "Settings", url: "/handler/settings", icon: <SettingsIcon size={16} /> },
     ];
 
     return (
-        <SidebarProvider >
+        <SidebarProvider>
             <PortalSidebar owner={"Handler"} links={links} />
             <SidebarInset>
                 <TooltipProvider>
-                    {children}
+                    <div className="p-6">
+                        {children}
+                    </div>
                     <Toaster richColors position="top-right" />
                 </TooltipProvider>
             </SidebarInset>
-        </SidebarProvider>);
+        </SidebarProvider>
+    );
 }
