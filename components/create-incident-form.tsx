@@ -174,7 +174,7 @@ export function CreateIncidentForm({ companyId }: { companyId: string }) {
                 <FieldLabel>Incident category</FieldLabel>
                 <Select items={categories} value={category} onValueChange={value => setCategory(value!)}>
                     <SelectTrigger className="w-45">
-                        <SelectValue placeholder="Selct a category" />
+                        <SelectValue placeholder="Select a category" />
                     </SelectTrigger>
                     <SelectContent>
                         <SelectGroup>
