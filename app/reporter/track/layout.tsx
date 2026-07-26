@@ -20,7 +20,6 @@ export default async function ReporterLayout({ children }: { children: React.Rea
         { label: "Incident", url: "/reporter/track", icon: <ListIcon size={16} /> },
         { label: "Messages", url: "/reporter/track/messages", icon: <MessageSquareIcon size={16} /> },
         { label: "Attachments", url: "/reporter/track/attachments", icon: <FileIcon size={16} /> },
-        { label: "Support", url: "/reporter/track/support", icon: <LifeBuoy size={16} /> },
     ];
 
     return (
