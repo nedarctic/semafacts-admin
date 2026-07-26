@@ -1,9 +1,11 @@
+import { SenderType } from "../enums/sender-type.enum";
+
 export interface Message {
-    id: string;
-    createdAt: Date;
+    id?: string;
+    createdAt?: Date;
     incidentId: string;
     senderType: SenderType;
     content: string;
-    reporterId: string | null;
-    userId: string | null;
+    reporterId?: string;
+    userId?: string;
 }
