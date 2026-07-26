@@ -1,4 +1,10 @@
-export async function getUser (accessToken: string, userId: string) {
+import { User } from "../types/user";
+
+export async function getUser (accessToken: string, userId: string): Promise<{
+    success: boolean;
+    data?: User;
+    error?: string;
+}> {
     try {
         const url = `${process.env.BACKEND_URL}/users/${userId}`;
         const res = await fetch(url, {
