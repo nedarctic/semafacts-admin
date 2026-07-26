@@ -30,7 +30,7 @@ const uploadEvidenceSchema = z.object({
         , "Provide at least one evidence file to submit").min(1, "Add at least one attachment")
 });
 
-export function AddEvidenceDrawer({ incidentId }: { incidentId: string }) {
+export function AddEvidenceDrawer({ incidentId, attachmentUploader }: { incidentId: string, attachmentUploader: AttachmentUploader }) {
     const router = useRouter();
 
     const [evidenceFiles, setEvidenceFiles] = useState<File[]>([]);
@@ -56,7 +56,7 @@ export function AddEvidenceDrawer({ incidentId }: { incidentId: string }) {
             }
 
             const formData = new FormData();
-            formData.append("uploadedBy", AttachmentUploader.SuperAdmin);
+            formData.append("uploadedBy", attachmentUploader);
 
             for (const evidenceFile of evidenceFiles) {
                 formData.append("attachments", evidenceFile);
