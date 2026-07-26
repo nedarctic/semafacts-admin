@@ -15,6 +15,7 @@ import { redirect } from "next/navigation";
 import { getNonIncidentHandlers } from "@/lib/helpers/incidents.helpers";
 import { AssignHandlersDrawer } from "@/components/assign-handlers-drawer";
 import { AddEvidenceDrawer } from "@/components/add-evidence-drawer";
+import { AttachmentUploader } from "@/lib/enums/attachment-uploader.enum";
 
 export default async function IncidentDetailsPage({ params }: { params: Promise<{ incidentId: string }> }) {
     const session = await getServerSession(authOptions);
@@ -118,7 +119,7 @@ export default async function IncidentDetailsPage({ params }: { params: Promise<
                         <div className="flex flex-col gap-6 border-2 border-mist-500 rounded-2xl min-h-screen p-6">
                             <div className="flex flex-row justify-between">
                                 <p className="font-semibold text-lg">Attachments</p>
-                                <AddEvidenceDrawer incidentId={incidentId} />
+                                <AddEvidenceDrawer incidentId={incidentId} attachmentUploader={AttachmentUploader.SuperAdmin} />
                             </div>
                             <div className="flex flex-col gap-2">
                                 <ul className="flex flex-col gap-3 list-decimal pl-4">
