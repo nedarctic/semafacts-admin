@@ -14,7 +14,7 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ in
         const formData = await req.formData();
         const url = `${process.env.BACKEND_URL}/incidents/${incidentId}`;
         const res = await fetch(url, {
-            method: "POST",
+            method: "PATCH",
             headers: {
                 Authorization: `Bearer ${accessToken}`
             },
