@@ -14,25 +14,31 @@ import {
     SidebarMenuItem
 } from "./ui/sidebar";
 
-export function PortalSidebar({ owner, links }: { owner: "Reporter" | "Handler", links: {
-    label: string;
-    url: string;
-    icon: JSX.Element;
-}[] }) {
+export function PortalSidebar({ owner, links }: {
+    owner: "Reporter" | "Handler", links: {
+        label: string;
+        url: string;
+        icon: JSX.Element;
+    }[]
+}) {
 
     const pathname = usePathname();
     const router = useRouter();
-    
-    const isActive = (url: string) => {
 
-        if (pathname === url) {
-            return true;
-        }
-        if (pathname.startsWith(url) && url !== links[0].url) {
-            return true;
-        }
+    const urls = links.map(link => link.url);
+
+    const isPathnameStartWithAnotherUrl = (path: string) => {
+        const otherUrls = urls.filter(url => url !== path)
+        const arr = otherUrls.filter(url => pathname.startsWith(url));
+        if(arr.length) return true;
         return false;
     };
+
+    const isActive = (path: string) => {
+        if(pathname === path) return true;
+        if(pathname.startsWith(path) && !isPathnameStartWithAnotherUrl(path)) return true;
+        return false;
+    }
 
     return (
         <Sidebar variant="inset">
