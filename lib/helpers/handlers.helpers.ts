@@ -2,7 +2,15 @@ import { Incident } from "../types/incident";
 
 export async function getHandlerIncidents(accessToken: string, url: string): Promise<{
     success: boolean;
-    data?: Incident[];
+    data?: {
+        incidents: Incident[];
+        meta: {
+            page: number;
+            limit: number;
+            total: number;
+            totalPages: number;
+        }
+    }
     error?: string;
 }> {
     try {        
