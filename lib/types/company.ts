@@ -1,3 +1,5 @@
+import { ReportingPage } from "./reporting-page";
+
 export interface Company {
     id: string;
     name: string;
@@ -7,4 +9,5 @@ export interface Company {
     logoUrl: string | null;
     createdAt: Date;
     updatedAt: Date;
+    reportingPage?: ReportingPage;
 };

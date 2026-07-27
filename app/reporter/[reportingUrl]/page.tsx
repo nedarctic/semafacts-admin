@@ -18,9 +18,13 @@ export default async function ReporterHomePage({ params }: { params: Promise<{ r
         .slice(0, 2)
         .toUpperCase();
 
+    const introContent = company.reportingPage?.introContent;
+    const pageTitle = company.reportingPage?.title ?? `${company.name} reporting page`;
+
     return (
         <div className="flex flex-col items-center min-h-screen w-full px-6 py-10 gap-6">
             <div className="w-full max-w-5xl space-y-6">
+                <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">{pageTitle}</h1>
                 <Card className="overflow-hidden">
                     <CardHeader className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                         <div className="flex items-center gap-4">
@@ -43,20 +47,27 @@ export default async function ReporterHomePage({ params }: { params: Promise<{ r
                             </div>
                         </div>
                     </CardHeader>
-                    <CardContent className="grid gap-4 sm:grid-cols-3">
-                        <div className="rounded-3xl border border-border/70 bg-background p-4">
-                            <p className="text-xs uppercase tracking-[0.28em] text-muted-foreground">Reporting slug</p>
-                            <p className="mt-2 font-semibold break-all">{company.reportingLinkSlug ?? reportingUrl}</p>
-                        </div>
-                        <div className="rounded-3xl border border-border/70 bg-background p-4">
-                            <p className="text-xs uppercase tracking-[0.28em] text-muted-foreground">SLA window</p>
-                            <p className="mt-2 font-semibold">{company.slaDays ?? "N/A"} days</p>
-                        </div>
-                        <div className="rounded-3xl border border-border/70 bg-background p-4">
-                            <p className="text-xs uppercase tracking-[0.28em] text-muted-foreground">Privacy</p>
-                            <p className="mt-2 text-sm text-muted-foreground">
-                                Reports are routed to the company’s incident team for review.
-                            </p>
+                    <CardContent className="space-y-4">
+                        {introContent ? (
+                            <div className="rounded-3xl border border-border/70 bg-background p-4 text-sm leading-7 text-muted-foreground">
+                                {introContent}
+                            </div>
+                        ) : null}
+                        <div className="grid gap-4 sm:grid-cols-3">
+                            <div className="rounded-3xl border border-border/70 bg-background p-4">
+                                <p className="text-xs uppercase tracking-[0.28em] text-muted-foreground">Reporting slug</p>
+                                <p className="mt-2 font-semibold break-all">{company.reportingLinkSlug ?? reportingUrl}</p>
+                            </div>
+                            <div className="rounded-3xl border border-border/70 bg-background p-4">
+                                <p className="text-xs uppercase tracking-[0.28em] text-muted-foreground">SLA window</p>
+                                <p className="mt-2 font-semibold">{company.slaDays ?? "N/A"} days</p>
+                            </div>
+                            <div className="rounded-3xl border border-border/70 bg-background p-4">
+                                <p className="text-xs uppercase tracking-[0.28em] text-muted-foreground">Privacy</p>
+                                <p className="mt-2 text-sm text-muted-foreground">
+                                    Reports are routed to the company’s incident team for review.
+                                </p>
+                            </div>
                         </div>
                     </CardContent>
                 </Card>
