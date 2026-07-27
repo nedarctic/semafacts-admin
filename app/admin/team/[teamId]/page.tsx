@@ -5,7 +5,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { User } from "@/lib/types/user";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
-import { getHandlerIncidents } from "@/lib/helpers/handlers.helpers";
+import { getHandlerNonPaginatedIncidents } from "@/lib/helpers/handlers.helpers";
 import { UserStatus } from "@/lib/enums/user-status.enum";
 import { DeactivateMemberDialog } from "@/components/deactivate-member-dialog";
 import { EditUserDrawer } from "@/components/edit-user-drawer";
@@ -35,9 +35,7 @@ export default async function TeamMemberDetailsPage({ params }: {
 
     const handlerIncidentsUrl = `${process.env.BACKEND_URL}/handlers/${teamId}/incidents/non-paginated`;
 
-    const { success, data: handlerIncidents, error } = await getHandlerIncidents(accessToken, handlerIncidentsUrl);
-
-    console.log("handler incidents", handlerIncidents);
+    const { success, data: handlerIncidents, error } = await getHandlerNonPaginatedIncidents(accessToken, handlerIncidentsUrl);
 
     const crumbs = [
         { label: "Team", link: "/admin/team" }
