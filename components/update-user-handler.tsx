@@ -11,7 +11,7 @@ import { Input } from "./ui/input";
 import { Spinner } from "./ui/spinner";
 import { toast } from "sonner";
 
-export function UpdateUserHandlerDrawer({ data }: { data: { id: string, name: string, email: string } }) {
+export function UpdateUserDrawer({ data }: { data: { id: string, name: string, email: string } }) {
     const router = useRouter();
 
     const [name, setName] = useState<string>(data.name);
