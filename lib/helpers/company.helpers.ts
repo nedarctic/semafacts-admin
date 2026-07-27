@@ -1,3 +1,5 @@
+import { Company } from "../types/company";
+
 export async function getTotalCompanyIncidents(
     accessToken: string,
     companyId: string,
@@ -96,6 +98,40 @@ export async function getTotalCompanyOpenIncidents(
         const data = await res.json();
 
         if (!res.ok) {
+            return {
+                success: false,
+                error: data.message || "Backend request error"
+            }
+        }
+
+        return {
+            success: true,
+            data
+        }
+
+    } catch (error) {
+        return {
+            success: false,
+            error: error instanceof Error ? error.message : String(error)
+        }
+    }
+}
+
+export async function getCompanyByReportingPage(
+    reportingUrl: string
+): Promise<{
+    success: boolean;
+    data?: Company;
+    error?: string;
+}> {
+    try {
+        const url = `${process.env.BACKEND_URL}/companies/${reportingUrl}/company`;
+        const res = await fetch(url, {
+            method: "GET",
+        });
+
+        const data = await res.json();
+        if(!res.ok) {
             return {
                 success: false,
                 error: data.message || "Backend request error"

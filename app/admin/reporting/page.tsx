@@ -1,5 +1,6 @@
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { BreadCrumb } from "@/components/breadcrumb";
+import { ReportingPageTable } from "@/components/reporting-page-table";
 import { Table, TableBody, TableCell, TableHead, TableRow } from "@/components/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { UpdateCategoriesDrawer } from "@/components/update-categories-drawer";
@@ -45,6 +46,8 @@ export default async function ReportingPage() {
         reportingPage: ReportingPage
     } = await res.json();
 
+    const reportingPageUrl = `${process.env.FRONTEND_URL}/reporter/${reportingPage.reportingPageUrl}`
+
     return (
         <div className="flex min-h-screen flex-col gap-8">
             <BreadCrumb currentPage="Reporting Page" />
@@ -70,26 +73,7 @@ export default async function ReportingPage() {
                             </p>
                             <UpdateReportingPageDrawer data={reportingPage} />
                         </div>
-                        <Table>
-                            <TableBody>
-                                <TableRow>
-                                    <TableHead className="w-32">Title</TableHead>
-                                    <TableCell>{reportingPage.title ? reportingPage.title : "Not set"}</TableCell>
-                                </TableRow>
-                                <TableRow>
-                                    <TableHead className="w-32">Page URL</TableHead>
-                                    <TableCell>{reportingPage.reportingPageUrl ? reportingPage.reportingPageUrl : "Not set"}</TableCell>
-                                </TableRow>
-                                <TableRow>
-                                    <TableHead className="w-32">Introduction</TableHead>
-                                    <TableCell>{reportingPage.introContent ? reportingPage.introContent : "Not set"}</TableCell>
-                                </TableRow>
-                                <TableRow>
-                                    <TableHead className="w-32">Policy URL</TableHead>
-                                    <TableCell>{reportingPage.policyUrl ? reportingPage.policyUrl : "Not set"}</TableCell>
-                                </TableRow>
-                            </TableBody>
-                        </Table>
+                        <ReportingPageTable reportingPage={reportingPage} reportingPageUrl={reportingPageUrl} />
                     </TabsContent>
 
                     <TabsContent value="categories" className="space-y-6">
