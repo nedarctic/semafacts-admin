@@ -1,14 +1,13 @@
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { BreadCrumb } from "@/components/breadcrumb";
+import { Table, TableBody, TableCell, TableHead, TableRow } from "@/components/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { UpdateCategoriesDrawer } from "@/components/update-categories-drawer";
 import { UpdateReportingPageDrawer } from "@/components/update-reporting-page-drawer";
-import { Category } from "@/lib/types/category";
+import { getCategories } from "@/lib/helpers/categories.helpers";
 import { type ReportingPage } from "@/lib/types/reporting-page";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
-import { getCategories } from "@/lib/helpers/categories.helpers";
-import { Table, TableBody, TableCell, TableHead, TableRow } from "@/components/ui/table";
 
 export default async function ReportingPage() {
 
@@ -47,61 +46,71 @@ export default async function ReportingPage() {
     } = await res.json();
 
     return (
-        <div className="min-h-screen flex flex-col gap-6">
+        <div className="flex min-h-screen flex-col gap-8">
             <BreadCrumb currentPage="Reporting Page" />
-            <div className="flex flex-col gap-4">
-                <p className="text-2xl">Reporting Page</p>
-                <Tabs defaultValue="overview" className="flex flex-col gap-4 w-full">
+
+            <div className="space-y-4">
+                <p className="text-sm font-medium uppercase tracking-[0.28em] text-muted-foreground">
+                    Overview
+                </p>
+                <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">Reporting Page</h1>
+            </div>
+
+            <div className="space-y-6 border-t border-foreground/10 pt-8">
+                <Tabs defaultValue="overview" className="flex w-full flex-col gap-6">
                     <TabsList>
                         <TabsTrigger value="overview">Overview</TabsTrigger>
                         <TabsTrigger value="categories">Categories</TabsTrigger>
                     </TabsList>
-                    <TabsContent value="overview">
-                        <div className="flex flex-col gap-6 border-2 border-mist-500 rounded-2xl min-h-screen p-6">
-                            <div className="flex flex-row justify-between">
-                                <p className="font-semibold text-lg">Overview</p>
-                                <UpdateReportingPageDrawer data={reportingPage} />
-                            </div>
 
-                            <Table>
-                                <TableBody>
-                                    <TableRow>
-                                        <TableHead>Title</TableHead>
-                                        <TableCell>{reportingPage.title ? reportingPage.title : "Not set"}</TableCell>
-                                    </TableRow>
-                                    <TableRow>
-                                        <TableHead>Page URL</TableHead>
-                                        <TableCell>{reportingPage.reportingPageUrl ? reportingPage.reportingPageUrl : "Not set"}</TableCell>
-                                    </TableRow>
-                                    <TableRow>
-                                        <TableHead>Introduction</TableHead>
-                                        <TableCell>{reportingPage.introContent ? reportingPage.introContent : "Not set"}</TableCell>
-                                    </TableRow>
-                                    <TableRow>
-                                        <TableHead>Policy URL</TableHead>
-                                        <TableCell>{reportingPage.policyUrl ? reportingPage.policyUrl : "Not set"}</TableCell>
-                                    </TableRow>
-                                </TableBody>
-                            </Table>
+                    <TabsContent value="overview" className="space-y-6">
+                        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                            <p className="text-sm font-semibold uppercase tracking-[0.25em] text-muted-foreground">
+                                Details
+                            </p>
+                            <UpdateReportingPageDrawer data={reportingPage} />
                         </div>
+                        <Table>
+                            <TableBody>
+                                <TableRow>
+                                    <TableHead className="w-32">Title</TableHead>
+                                    <TableCell>{reportingPage.title ? reportingPage.title : "Not set"}</TableCell>
+                                </TableRow>
+                                <TableRow>
+                                    <TableHead className="w-32">Page URL</TableHead>
+                                    <TableCell>{reportingPage.reportingPageUrl ? reportingPage.reportingPageUrl : "Not set"}</TableCell>
+                                </TableRow>
+                                <TableRow>
+                                    <TableHead className="w-32">Introduction</TableHead>
+                                    <TableCell>{reportingPage.introContent ? reportingPage.introContent : "Not set"}</TableCell>
+                                </TableRow>
+                                <TableRow>
+                                    <TableHead className="w-32">Policy URL</TableHead>
+                                    <TableCell>{reportingPage.policyUrl ? reportingPage.policyUrl : "Not set"}</TableCell>
+                                </TableRow>
+                            </TableBody>
+                        </Table>
                     </TabsContent>
-                    <TabsContent value="categories">
-                        <div className="flex flex-col gap-6 border-2 border-mist-500 rounded-2xl min-h-screen p-6">
-                            <div className="flex flex-row justify-between">
-                                <p className="font-semibold text-lg">Categories</p>
-                                <UpdateCategoriesDrawer data={categories!} />
-                            </div>
 
-                            <Table>
-                                <TableBody>
-                                    {categories?.map((category, index) =>
-                                        <TableRow key={index} className="text-md">
-                                            <TableCell>{category.categoryName}</TableCell>
-                                        </TableRow>
-                                    )}
-                                </TableBody>
-                            </Table>
+                    <TabsContent value="categories" className="space-y-6">
+                        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                            <p className="text-sm font-semibold uppercase tracking-[0.25em] text-muted-foreground">
+                                Categories
+                            </p>
+                            <UpdateCategoriesDrawer data={categories!} />
                         </div>
+                        <Table>
+                            <TableBody>
+                                <TableRow>
+                                    <TableHead>Categories</TableHead>
+                                </TableRow>
+                                {categories?.map((category, index) => (
+                                    <TableRow key={index}>
+                                        <TableCell>{category.categoryName}</TableCell>
+                                    </TableRow>
+                                ))}
+                            </TableBody>
+                        </Table>
                     </TabsContent>
                 </Tabs>
             </div>

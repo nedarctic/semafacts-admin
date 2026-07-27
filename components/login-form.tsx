@@ -67,14 +67,14 @@ export function LoginForm({
 
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
-      <Card>
-        <CardHeader className="text-center">
+      <Card className="border-border/70 bg-background/95 shadow-xl shadow-black/5">
+        <CardHeader className="px-6 pb-4 text-center">
           <CardTitle className="text-xl">Welcome back</CardTitle>
           <CardDescription>
-            Login with your E-mail and password
+            Sign in with your work email and password to continue.
           </CardDescription>
         </CardHeader>
-        <CardContent>
+        <CardContent className="px-6 pb-6">
           <form onSubmit={loginHandler}>
             <FieldGroup>
               <Field>
@@ -123,9 +123,9 @@ export function LoginForm({
                   </InputGroupAddon>
                 </InputGroup>
               </Field>
-              {error && <p className="text-red-600 font-normal text-sm">{error}</p>}
+              {error && <p className="text-sm font-medium text-red-600">{error}</p>}
               <Field>
-                <Button type="submit">{isPending ? "Signing in..." : "Sign in"}</Button>
+                <Button type="submit" className="w-full">{isPending ? "Signing in..." : "Sign in"}</Button>
               </Field>
             </FieldGroup>
           </form>

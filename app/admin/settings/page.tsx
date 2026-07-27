@@ -43,29 +43,45 @@ export default async function SettingsPage() {
     const data = { name, logoUrl, slaDays }
 
     return (
-        <div className="min-h-screen flex flex-col gap-6">
+        <div className="flex min-h-screen flex-col gap-8">
             <BreadCrumb currentPage="Settings" />
-            <div className="flex flex-col gap-4">
-                <div className="flex flex-row justify-between">
-                    <p className="text-2xl">Settings</p>
+
+            <div className="space-y-4">
+                <p className="text-sm font-medium uppercase tracking-[0.28em] text-muted-foreground">
+                    Overview
+                </p>
+                <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+                    <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">Settings</h1>
                     <UpdateCompanyDrawer data={data} />
                 </div>
-                <Table>
-                    <TableBody>
-                        <TableRow>
-                            <TableHead>Company Name</TableHead>
-                            <TableCell>{company.name}</TableCell>
-                        </TableRow>
-                        <TableRow>
-                            <TableHead>SLA Days</TableHead>
-                            <TableCell>{company.slaDays}</TableCell>
-                        </TableRow>
-                        <TableRow>
-                            <TableHead>Logo</TableHead>
-                            <TableCell>{company.logoUrl ? <p className="font-medium">Set</p> : <p className="font-medium">Not set</p>}</TableCell>
-                        </TableRow>
-                    </TableBody>
-                </Table>
+            </div>
+
+            <div className="space-y-6 border-t border-foreground/10 pt-8">
+                <div className="space-y-2">
+                    <p className="text-sm font-semibold uppercase tracking-[0.25em] text-muted-foreground">
+                        Company details
+                    </p>
+                    <p className="text-lg text-muted-foreground">
+                        Review and update your company profile information.
+                    </p>
+                </div>
+
+                    <Table>
+                        <TableBody>
+                            <TableRow>
+                                <TableHead className="w-32">Company Name</TableHead>
+                                <TableCell>{company.name}</TableCell>
+                            </TableRow>
+                            <TableRow>
+                                <TableHead className="w-32">SLA Days</TableHead>
+                                <TableCell>{company.slaDays}</TableCell>
+                            </TableRow>
+                            <TableRow>
+                                <TableHead className="w-32">Logo</TableHead>
+                                <TableCell>{company.logoUrl ? <p className="font-medium">Set</p> : <p className="font-medium">Not set</p>}</TableCell>
+                            </TableRow>
+                        </TableBody>
+                    </Table>
             </div>
         </div>
     )

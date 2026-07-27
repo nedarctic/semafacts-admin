@@ -73,10 +73,26 @@ export default async function IncidentsPage({ searchParams }: {
     ];
 
     return (
-        <div className="min-h-screen flex flex-col gap-6">
+        <div className="flex min-h-screen flex-col gap-8">
             <BreadCrumb currentPage="Incidents" />
-            <div className="flex flex-col gap-6">
-                <p className="text-2xl">Incidents</p>
+
+            <div className="space-y-4">
+                <p className="text-sm font-medium uppercase tracking-[0.28em] text-muted-foreground">
+                    Overview
+                </p>
+                <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">Incidents</h1>
+            </div>
+
+            <div className="space-y-6 border-t border-foreground/10 pt-8">
+                <div className="space-y-2">
+                    <p className="text-sm font-semibold uppercase tracking-[0.25em] text-muted-foreground">
+                        Records
+                    </p>
+                    <p className="text-lg text-muted-foreground">
+                        Review submitted incidents and their current status.
+                    </p>
+                </div>
+
                 <SearchInput placeholder="Search incidents..." />
                 <TableData path={"/admin/incidents"} data={incidents} headers={headers} />
                 <PaginationComponent meta={meta} />

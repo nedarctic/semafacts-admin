@@ -59,8 +59,8 @@ export default function ReporterLoginForm() {
   return (
     <Card className="w-full max-w-xs">
       <CardHeader>
-        <CardTitle>Track Incident</CardTitle>
-        <CardDescription>Provide your code and secret code to securely track your incident</CardDescription>
+        <CardTitle>Track incident</CardTitle>
+        <CardDescription>Enter your incident code and secret code to securely view the status of your report.</CardDescription>
       </CardHeader>
       <CardContent>
         <Form 

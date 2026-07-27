@@ -73,13 +73,29 @@ export default async function TeamPage({ searchParams }: {
     ];
 
     return (
-        <div className="min-h-screen flex flex-col gap-6">
+        <div className="flex min-h-screen flex-col gap-8">
             <BreadCrumb currentPage="Team" />
-            <div className="flex flex-col gap-6">
-                <div className="flex flex-row justify-between w-full">
-                    <p className="text-2xl">Team</p>
+
+            <div className="space-y-4">
+                <p className="text-sm font-medium uppercase tracking-[0.28em] text-muted-foreground">
+                    Overview
+                </p>
+                <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+                    <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">Team</h1>
                     <AddHandlerDrawer companyId={companyId} />
                 </div>
+            </div>
+
+            <div className="space-y-6 border-t border-foreground/10 pt-8">
+                <div className="space-y-2">
+                    <p className="text-sm font-semibold uppercase tracking-[0.25em] text-muted-foreground">
+                        Members
+                    </p>
+                    <p className="text-lg text-muted-foreground">
+                        Manage team members and their access to the platform.
+                    </p>
+                </div>
+
                 <SearchInput placeholder="Search members..." />
                 <TableData path={"/admin/team"} data={users} headers={headers} />
                 <PaginationComponent meta={meta} />

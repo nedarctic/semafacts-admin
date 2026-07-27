@@ -2,7 +2,7 @@ import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { BreadCrumb } from "@/components/breadcrumb";
 import { TableData } from "@/components/table-data";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { UpdateUserHandlerDrawer } from "@/components/update-user-handler";
+import { UpdateUserDrawer } from "@/components/update-user-handler";
 import { getUser } from "@/lib/helpers/users.helpers";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
@@ -48,7 +48,7 @@ export default async function SettingsPage() {
             <BreadCrumb currentPage="Settings" />
             <div className="flex flex-row justify-between">
                 <p className="font-bold text-xl">Settings</p>
-                <UpdateUserHandlerDrawer data={propData} />
+                <UpdateUserDrawer data={propData} />
             </div>
             <div className="flex flex-col gap-2">
 
