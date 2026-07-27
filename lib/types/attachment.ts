@@ -1,3 +1,5 @@
+import { AttachmentUploader } from "../enums/attachment-uploader.enum";
+
 export interface Attachment {
     id: string;
     createdAt: Date;

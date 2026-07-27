@@ -1,3 +1,5 @@
+import { IncidentStatus } from "../enums/incident-status.enum";
+import { ReporterType } from "../enums/reporter-type.enum";
 import { Attachment } from "./attachment";
 import { Company } from "./company";
 import { IncidentHandler } from "./incident-handler";

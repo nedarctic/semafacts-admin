@@ -1,4 +1,5 @@
 import { UserRole } from "../enums/user-role.enum";
+import { UserStatus } from "../enums/user-status.enum";
 import { Company } from "./company";
 import { IncidentHandler } from "./incident-handler";
 import { InviteToken } from "./invite-token";
