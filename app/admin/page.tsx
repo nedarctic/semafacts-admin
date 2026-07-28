@@ -159,8 +159,9 @@ export default async function DashboardPage({ searchParams }: {
         {incidents.length ? <div>
           <SearchInput placeholder="Search incidents..." />
           <TableData path="/admin/incidents" data={incidents} headers={headers} />
-        </div> : <p className="font-medium text-md">There are no incidents yet in this institution.</p>}
-        <PaginationComponent meta={meta} />
+          <PaginationComponent meta={meta} />
+        </div> : <p className="text-md">There are no incidents yet in this institution.</p>}
+        
       </div>
 
       <div className="space-y-6 border-t border-foreground/10 pt-8">
@@ -173,7 +174,7 @@ export default async function DashboardPage({ searchParams }: {
           </p>
         </div>
 
-        {incidents.length ? <IncidentTimelineChart data={timelineData} /> : <p className="font-medium text-md">A chart with incidents distribution over time will show as soon as there are reported incidents for this institution.</p>}
+        {incidents.length ? <IncidentTimelineChart data={timelineData} /> : <p className="text-md">A chart with incidents distribution over time will show as soon as there are reported incidents for this institution.</p>}
       </div>
     </div>
   );

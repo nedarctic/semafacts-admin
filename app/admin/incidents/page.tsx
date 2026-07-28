@@ -55,7 +55,7 @@ export default async function IncidentsPage({ searchParams }: {
     }
 
     const { incidents, meta }: {
-        incidents: Incident[]; 
+        incidents: Incident[];
         meta: {
             page: number;
             limit: number;
@@ -64,12 +64,12 @@ export default async function IncidentsPage({ searchParams }: {
         };
     } = await res.json();
 
-    const headers = [        
-        {label: "Incident ID", key: "incidentIdDisplay"},
-        {label: "Category", key: "category"},
-        {label: "Created", key: "createdAt"},
-        {label: "Deadline", key: "deadlineAt"},
-        {label: "Status", key: "status"},
+    const headers = [
+        { label: "Incident ID", key: "incidentIdDisplay" },
+        { label: "Category", key: "category" },
+        { label: "Created", key: "createdAt" },
+        { label: "Deadline", key: "deadlineAt" },
+        { label: "Status", key: "status" },
     ];
 
     return (
@@ -95,9 +95,9 @@ export default async function IncidentsPage({ searchParams }: {
 
                 {incidents.length ? <div>
                     <SearchInput placeholder="Search incidents..." />
-                <TableData path={"/admin/incidents"} data={incidents} headers={headers} />
-                <PaginationComponent meta={meta} />
-                </div> : <p className="font-medium text-md">There are no incidents yet in this institution.</p>}
+                    <TableData path={"/admin/incidents"} data={incidents} headers={headers} />
+                    <PaginationComponent meta={meta} />
+                </div> : <p className="text-md">There are no incidents yet in this institution.</p>}
             </div>
         </div>
     )
