@@ -1,3 +1,4 @@
+import { Category } from "./category";
 import { ReportingPage } from "./reporting-page";
 
 export interface Company {
@@ -10,4 +11,5 @@ export interface Company {
     createdAt: Date;
     updatedAt: Date;
     reportingPage?: ReportingPage;
+    categories?: Category[];
 };

@@ -15,6 +15,7 @@ import { Spinner } from "./ui/spinner";
 import { Textarea } from "./ui/textarea";
 import { useRouter } from "next/navigation";
 import { ALLOWED_MIME_TYPES } from "@/lib/constants";
+import { Category } from "@/lib/types/category";
 
 enum ReporterType {
     Anonymous = "Anonymous",
@@ -43,7 +44,13 @@ const createIncidentSchema = z.object({
     ).optional()
 });
 
-export function CreateIncidentForm({ companyId }: { companyId: string }) {
+export function CreateIncidentForm({ 
+    companyId, 
+    categoriesData 
+}: { 
+    companyId: string; 
+    categoriesData: Category[] 
+}) {
 
     const router = useRouter();
 
@@ -59,9 +66,8 @@ export function CreateIncidentForm({ companyId }: { companyId: string }) {
     const [email, setEmail] = useState<string>();
     const [phone, setPhone] = useState<string>();
 
-    const categories = [
-        { label: "Sexual harrassment", value: "Sexual harrassment" }
-    ];
+    const categories = categoriesData.map(category => ({label: category.categoryName, value: category.categoryName}))
+
     const [code, setCode] = useState<string>('');
     const [secretCode, setSecretCode] = useState<string>('');
 

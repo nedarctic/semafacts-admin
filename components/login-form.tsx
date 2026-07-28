@@ -91,7 +91,7 @@ export function LoginForm({
                 <div className="flex items-center justify-between">
                   <FieldLabel htmlFor="password">Password</FieldLabel>
                   <Link
-                    href="/password"
+                    href="/password-reset"
                     className="text-sm text-muted-foreground hover:underline"
                   >
                     Forgot password?

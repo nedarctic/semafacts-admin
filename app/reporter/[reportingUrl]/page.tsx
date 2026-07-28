@@ -73,7 +73,7 @@ export default async function ReporterHomePage({ params }: { params: Promise<{ r
                 </Card>
 
                 <div className="flex flex-col items-center w-full">
-                    <CreateIncidentForm companyId={company.id} />
+                    <CreateIncidentForm companyId={company.id} categoriesData={company.categories!} />
                 </div>
             </div>
         </div>
