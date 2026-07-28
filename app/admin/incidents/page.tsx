@@ -93,9 +93,11 @@ export default async function IncidentsPage({ searchParams }: {
                     </p>
                 </div>
 
-                <SearchInput placeholder="Search incidents..." />
+                {incidents.length ? <div>
+                    <SearchInput placeholder="Search incidents..." />
                 <TableData path={"/admin/incidents"} data={incidents} headers={headers} />
                 <PaginationComponent meta={meta} />
+                </div> : <p className="font-medium text-md">There are no incidents yet in this institution.</p>}
             </div>
         </div>
     )
